@@ -8,8 +8,8 @@
 #include <time.h>
 #include <omp.h>
 
-#include "/home/giannisvidras/Documents/ptixiaki/myLibs/functions.h"
-#include "/home/giannisvidras/Documents/ptixiaki/myLibs/colib.h"
+#include "/home/giannisvidras/Documents/ptixiaki/code/myLibs/functions.h"
+#include "/home/giannisvidras/Documents/ptixiaki/code/myLibs/colib.h"
 
 #define cores 8
 int main(int argc, char const *argv[]) {
@@ -39,7 +39,7 @@ printf(RESET"\n");
 
   for(i=0; i<N; i++){
     for (j=0; j<N; j++) {
-      A[i][j] = randomGen();
+      A[i][j] = randomGenInteger(1, 2500);
     }
   }
 
