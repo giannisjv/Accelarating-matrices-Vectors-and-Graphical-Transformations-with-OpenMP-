@@ -8,7 +8,7 @@
 #include <time.h>
 #include <omp.h>
 
-#include "/home/giannis/Dropbox/Πτυχιακή/myLibs/ragnlib.h"
+#include "/home/giannisvidras/Documents/ptixiaki/myLibs/ragnlib.h"
 #include "/home/giannisvidras/Documents/ptixiaki/myLibs/colib.h"
 
 #define cores 8
