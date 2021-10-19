@@ -9,7 +9,7 @@
 #include <omp.h>
 
 #include "/home/giannis/Dropbox/Πτυχιακή/myLibs/ragnlib.h"
-#include "/home/giannis/Dropbox/Πτυχιακή/myLibs/colib.h"
+#include "/home/giannisvidras/Documents/ptixiaki/myLibs/colib.h"
 
 #define cores 8
 int main(int argc, char const *argv[]) {
