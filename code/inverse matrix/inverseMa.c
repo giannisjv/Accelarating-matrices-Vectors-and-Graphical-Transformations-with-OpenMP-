@@ -2,9 +2,9 @@
 #include <time.h>
 #include <stdlib.h>
 
-//#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/ragnlibflo.h"
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/colib.h"
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/functions.h"
+
+#include "../myLibs/colib.h"
+#include "../myLibs/functions.h"
 
 #define N 4
 #define M N-1

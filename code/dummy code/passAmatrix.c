@@ -4,9 +4,8 @@
 #include <stdlib.h>
 
 // MyLibs
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/ragnlib.h"
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/colib.h"
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/functions.h"
+#include "../myLibs/colib.h"
+#include "../myLibs/functions.h"
 
 //Default public varible values
 #define N 2

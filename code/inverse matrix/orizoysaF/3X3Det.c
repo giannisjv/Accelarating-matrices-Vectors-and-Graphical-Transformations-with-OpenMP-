@@ -1,9 +1,9 @@
 #include<stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include "/home/giannisvi/Dropbox/Πτυχιακή/myLibs/ragnlib.h"
-#include "/home/giannisvi/Dropbox/Πτυχιακή/myLibs/colib.h"
 
+#include "../myLibs/colib.h"
+#include "../myLibs/functions.h"
 #define N 3
 
 int main(){

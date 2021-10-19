@@ -2,9 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 
-
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/functions.h"
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/colib.h"
+#include "../myLibs/colib.h"
+#include "../myLibs/functions.h"
 
 #define N 4
 
