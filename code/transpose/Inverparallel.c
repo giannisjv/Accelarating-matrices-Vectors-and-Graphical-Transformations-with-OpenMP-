@@ -12,10 +12,12 @@
 #include "../myLibs/functions.h"
 
 #define cores 8
+#define NN 40
 int main(int argc, char const *argv[]) {
 
   int **A, **B;
-  int Metrics[10],CPUS[10],N[10] , metr, mat=0;
+  int CPUS[NN], N[NN] , metr, mat=0;
+  double Metrics[NN];
   int i, j, l, counter = 0;
   int loop_start = 10000, loop_end = 100000, loop_step = 10000;
 
@@ -66,6 +68,10 @@ printf("\n|---------------------------------------------------------------------
   clock_t seq_End = clock();
 
   double time_tooks = (double) (seq_End - seq_Start) /CLOCKS_PER_SEC;
+  Metrics[mat] = time_tooks;
+  CPUS[mat] = l;
+  N[mat] = metr;
+  mat++;
   //printf(CYN"\nTime needs to run Sequentialy is " GRN "(%6.6f)"CYN"\n"RESET,time_tooks);
   //printf("\n");
     } else{
@@ -84,6 +90,10 @@ printf("\n|---------------------------------------------------------------------
   Stop=omp_get_wtime();
 
    CPU_time = Stop - Start;
+    Metrics[mat] = CPU_time;
+    CPUS[mat] = l;
+    N[mat] = metr;
+  mat++;
  /*
     printf(CYN"Time needed to run in "GRN"(%d)"CYN" CPU cores is " GRN "(%6.6f)"CYN"\n"RESET,l ,CPU_time);
     //printf("errors where appeared "GRN" (%2d)\n",counter);
@@ -117,5 +127,11 @@ free(A);
 free(B);
 
 }
+printf("------------------------------------");
+printf("\nN, CPU,\tTime");
+for(i=0; i< NN; i++){
+printf("%d, %d, %6.6f",N[i],CPUS[i],Metrics[i]);
+}
+printf("------------------------------------");
   return 0;
 }
