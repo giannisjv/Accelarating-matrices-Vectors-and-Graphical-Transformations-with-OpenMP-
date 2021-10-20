@@ -1,118 +1,121 @@
 /* Ανάστροφος πίνακας
    Vidras Ioannis
    4414002
-   Sequencial algorithm */
+   Parallel of transponse algorithm */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
 
-#include "/home/giannisvidras/Documents/ptixiaki/code/myLibs/functions.h"
-#include "/home/giannisvidras/Documents/ptixiaki/code/myLibs/colib.h"
+#include "../myLibs/colib.h"
+#include "../myLibs/functions.h"
 
 #define cores 8
 int main(int argc, char const *argv[]) {
 
   int **A, **B;
-  int N;
+  int Metrics[10],CPUS[10],N[10] , metr, mat=0;
   int i, j, l, counter = 0;
+  int loop_start = 10000, loop_end = 100000, loop_step = 10000;
+
+
+
+printf(YEL"\n|----------------------------------------------------------------------------|\n");
+printf("|\tThe transponse of a matrix in Linear Algebra\n");
+printf("|\tis the matrix flipped by the axis\n");
+printf("|\tfor example the [i] will be [j], the [j] will be [i]\n");
+printf("|\tAnd the simbol is [A]T = A\n");
+printf("|\tIf the matrix flip again\n|\twill give the first matrix");
+printf("\n|----------------------------------------------------------------------------|\n");
+  /*printf(GRN"\nInput the size of the matrix: "RESET);
+  scanf("%d",&metr);*/
+
+  for(metr = loop_start; metr <= loop_end; metr += loop_step){
+
+
   double CPU_time = 0.0;
   double Start = 0.0, Stop =0.0;
-  
-
-  printf("\nInput the size of the matrix\t"BLU);
-  scanf("%d",&N);
-
-printf(RESET"\n");
-
-  A = (int **)malloc(N * sizeof(int *));
-      for(i=0;i<N;i++){
-      A[i] = (int *)malloc(N * sizeof(int));
+  A = (int **)malloc(metr * sizeof(int *));
+      for(i=0; i<metr; i++){
+        A[i] = (int *)malloc(metr * sizeof(int));
     }
 
-    B = (int **)malloc(N * sizeof(int *));
-        for(i=0;i<N;i++){
-        B[i] = (int *)malloc(N * sizeof(int));
+    B = (int **)malloc(metr * sizeof(int *));
+        for(i=0; i<metr; i++){
+          B[i] = (int *)malloc(metr * sizeof(int));
       }
 
 
-  for(i=0; i<N; i++){
-    for (j=0; j<N; j++) {
+  for(i=0; i<metr; i++){
+    for (j=0; j<metr; j++) {
       A[i][j] = randomGenInteger(1, 2500);
     }
   }
 
   for( l=1; l<=cores; l*=2){
 
+/* If the l == 1 (l = core) the program doesn't need the #pragma to run so it disengaged! */ 
+    if(l == 1){
+        clock_t seq_Start = clock();
+      for (i=0; i<metr; i++) {
+        for (j=0; j<metr; j++) {
+         B[i][j] = A[j][i];
+    }
+  }
+  clock_t seq_End = clock();
+
+  double time_tooks = (double) (seq_End - seq_Start) /CLOCKS_PER_SEC;
+  //printf(CYN"\nTime needs to run Sequentialy is " GRN "(%6.6f)"CYN"\n"RESET,time_tooks);
+  //printf("\n");
+    } else{
+
      CPU_time = 0.0;
      Start = 0.0;
      Stop =0.0;
 
-/* Initiating the B array every time with "zeros"
-    for(i=0;i<N;i++){
-      for (j = 0; j < N; j++) {
-        B[i][j] = 0;
-      }
-    }
-    */
-
-      printf("\nBe patient, Waiting the the job with %d CPUs to end ",l );
   Start = omp_get_wtime();
-    #pragma omp parallel for collapse(2) schedule(static) num_threads(l) private(i, j,) shared(A, B, N)
-for (i=0; i<N; i++) {
-  for (j=0; j<N; j++) {
-    /* code */
-
-    B[i][j] = A[j][i];
+    #pragma omp parallel for collapse(2) schedule(static) num_threads(l) private(i, j,) shared(A, B, metr)
+      for (i=0; i<metr; i++) {
+        for (j=0; j<metr; j++) {
+          B[i][j] = A[j][i];
     }
   }
   Stop=omp_get_wtime();
 
+   CPU_time = Stop - Start;
+ /*
+    printf(CYN"Time needed to run in "GRN"(%d)"CYN" CPU cores is " GRN "(%6.6f)"CYN"\n"RESET,l ,CPU_time);
+    //printf("errors where appeared "GRN" (%2d)\n",counter);
+    printf("\n");*/
+
+}
 /*
 //Print statements for the Matrices
     printf(GRN"\n\nMatrix A\n"RESET);
-  for (i = 0; i <N; i++) {
+  for (i = 0; i <metr; i++) {
     printf("\n");
-    for (j = 0; j <N; j++) {
+    for (j = 0; j <metr; j++) {
 
       printf(MAG"(%2d)\t",A[i][j] );
       }
     }
 
     printf(YEL"\n\nMatrix B\n"RESET);
-  for (i = 0; i <N; i++) {
+  for (i = 0; i <metr; i++) {
     printf("\n");
-    for (j = 0; j <N; j++) {
+    for (j = 0; j <metr; j++) {
 
       printf(RED"(%2d)\t",B[i][j] );
       }
     }
     */
-
-    CPU_time = Stop - Start;
-    //CPU_time /= CLOCKS_PER_SEC;
-
-/*
-// checking if the operations are correct!
-    for (i = 0; i <N; i++) {
-      for (j = 0; j <N; j++) {
-
-
-        if (B[i][j] != A[j][i]){
-          counter++;
-        }
-        }
-      }
-
-*/
-    printf(CYN"\nTime tooks to run in "GRN"(%d)"GRN" CPUs is " GRN "(%6.6f)"CYN"\n"RESET,l ,CPU_time);
-    //printf("errors where appeared "GRN" (%2d)\n",counter);
-    printf("\n");
   }
+
 // Freeing Matrices from RAM
 free(A);
 free(B);
 
+}
   return 0;
 }
