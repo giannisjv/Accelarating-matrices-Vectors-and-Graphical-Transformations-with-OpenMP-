@@ -13,7 +13,7 @@ double randomGenFloat(double min, double max){
 
 //randomness function
 int randomGenInteger(int min, int max){
-
+srand(time(NULL));
   
   int num = rand() % (max - min) + min;
     return num;

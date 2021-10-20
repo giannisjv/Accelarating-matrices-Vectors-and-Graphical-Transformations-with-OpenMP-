@@ -5,10 +5,12 @@
 #include <time.h>
 #include <omp.h>
 
+//myLibs
+#include "../../myLibs/functions.h"
+#include "../../myLibs/colib.h"
 
 #define cores 12
-#define randomness 22000
-//#define N 100000
+
 int main(){
 	 int Array_Size, Line_sizes;
 	// timer an clock
@@ -31,7 +33,7 @@ int main(){
 	printf("M:  ");
 	scanf("%d",&M);
 
-Multiply_Numb = rand() % randomness;
+Multiply_Numb = randomGenInteger(1, 22000);
 
 printf("N= (%d)\tM= (%d)\tRandom Number: (%d)\tcounter(%d)\n",N,M,Multiply_Numb,counter);
 
@@ -69,7 +71,7 @@ printf("N= (%d)\tM= (%d)\tRandom Number: (%d)\tcounter(%d)\n",N,M,Multiply_Numb,
 
 	for(i=0;i<N;i++){
 	   for(j=0;j<M;j++){
-			 A[i][j] = rand() % randomness;
+			 A[i][j] = rand() % randomGenInteger(1, 2500);
 		 }
 	 }
 

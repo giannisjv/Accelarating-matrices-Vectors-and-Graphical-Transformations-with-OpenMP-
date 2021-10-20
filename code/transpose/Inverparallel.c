@@ -19,7 +19,7 @@ int main(int argc, char const *argv[]) {
   int i, j, l, counter = 0;
   double CPU_time = 0.0;
   double Start = 0.0, Stop =0.0;
-  srand(time(NULL));
+  
 
   printf("\nInput the size of the matrix\t"BLU);
   scanf("%d",&N);
