@@ -23,17 +23,18 @@ int main(int argc, char const *argv[]) {
 
 
 
-printf(YEL"\n|----------------------------------------------------------------------------|\n");
-printf("|\tThe transponse of a matrix in Linear Algebra\n");
-printf("|\tis the matrix flipped by the axis\n");
-printf("|\tfor example the [i] will be [j], the [j] will be [i]\n");
-printf("|\tAnd the simbol is [A]T = A\n");
-printf("|\tIf the matrix flip again\n|\twill give the first matrix");
-printf("\n|----------------------------------------------------------------------------|\n");
+printf(YEL"\n|-------------------------------------------------------------|\n");
+printf("|\tThe transponse of a matrix in Linear Algebra|\t\t\t\t\n");
+printf("|\tis the matrix flipped by the axis\t\t\t|\n");
+printf("|\tfor example the [i] will be [j], the [j] will be [i] \t|\n");
+printf("|\tAnd the simbol is [A]^T = A\t\t\t\t|\n");
+printf("|\tIf the matrix flip again\n|\twill give the first matrix\t\t\t\t|");
+printf("\n|----------------------------------------------------------------|\n");
   /*printf(GRN"\nInput the size of the matrix: "RESET);
   scanf("%d",&metr);*/
 
   for(metr = loop_start; metr <= loop_end; metr += loop_step){
+    printf("\nN= %d\n",metr);
 
 
   double CPU_time = 0.0;
