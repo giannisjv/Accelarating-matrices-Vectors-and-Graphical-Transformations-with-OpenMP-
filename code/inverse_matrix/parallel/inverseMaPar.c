@@ -159,7 +159,7 @@ int y = -1;
         if (matrix1[i][i] == 0.0) {
 			   printf("\n\nOne element of the main diagonal is 0 (zero!) You can't procced!\n\n");
          printf("The element is x=(%d), y=(%d), value=(%d)\n",i,j,matrix1[i][j] );
-			   return -1;
+			   break;
 
     }
   }
