@@ -11,15 +11,15 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define cores 8
-#define NN 40
+#define cores 4
+#define NN 30
 int main(int argc, char const *argv[]) {
 
   int **A, **B;
   int CPUS[NN], N[NN] , metr, mat=0;
   double Metrics[NN];
   int i, j, l, counter = 0;
-  int loop_start = 10000, loop_end = 100000, loop_step = 10000;
+  int loop_start = 100, loop_end = 1000, loop_step = 100;
 
 
 
@@ -128,10 +128,10 @@ free(B);
 
 }
 printf("------------------------------------");
-printf("\nN, CPU,\tTime");
+printf("\n   N, CPU,\tTime");
 for(i=0; i< NN; i++){
-printf("%d, %d, %6.6f",N[i],CPUS[i],Metrics[i]);
+printf("\n%2d, %d, %6.6f",N[i],CPUS[i],Metrics[i]);
 }
-printf("------------------------------------");
+printf("\n------------------------------------\n");
   return 0;
 }

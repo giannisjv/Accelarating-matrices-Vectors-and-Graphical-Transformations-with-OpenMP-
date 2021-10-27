@@ -69,6 +69,7 @@ displayMatr(A);
 
 // Printing The upper triangular Matrix just to be sure no error occured
  printf("\n\n Εμφάνιση του Ανω τριγωνικού πίνακα!\n");
+ 
   for (int i = 0; i < N; i++) {
     printf("\n");
     for (int j = 0; j < N ; j++) {
@@ -90,7 +91,7 @@ printf("\n\n");
     printf("\tThe determinant of matrix is: %4.2f\n\n", det);
     // Countinue from here the attempt to find the adjustible matrix
       
-    
+    #pragma omp parallel for collapse(2) schedule (static) num_threads(2) private(i, j, p, k, c, ratio, temp, det_temp, Ad) shared(matrix, matrix1, det)
       for (p = 0; p < N; p++) {
         for (k = 0; k < N; k++) {
 
