@@ -8,7 +8,7 @@
 #include "../myLibs/functions.h"
 
 //Default public varible values
-#define N 2
+#define N 10
 #define M 3
 
 //determinant for 2x2 Matrix
@@ -63,6 +63,7 @@ void displaytempfl(float B[N][N]) {
   printf("\n\n-----------------------------\n");
   printf("End of display function\n");
 }
+
 
 int main() {
   float temp[N][N];
@@ -119,9 +120,10 @@ printf("\n-----------------------------");
 */
 for (i = 0; i < N; i++) {
   for (j = 0; j < N; j++) {
-    temp[i][j] = randomGen();
-
-    for (i = 0; i < N; i++) {
+    temp[i][j] = randomGenFloat(1.0, 10.0);
+  }
+}
+/*    for (i = 0; i < N; i++) {
       printf("\n");
       for (j = 0; j < N; j++) {
         printf("%d\t",temp[i][j]);
@@ -129,7 +131,8 @@ for (i = 0; i < N; i++) {
     Uptriangle(temp);
     displaytempfl(temp);
 
-
+*/
+displayMatr(N, temp);
 
 
   return 0;

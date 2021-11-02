@@ -1,5 +1,5 @@
 
-//randomness function
+//randomness function floating Point
 
 
 double randomGenFloat(double min, double max){
@@ -11,13 +11,19 @@ double randomGenFloat(double min, double max){
     return num;
 };
 
-//randomness function
+//randomness function integer
 int randomGenInteger(int min, int max){
 srand(time(NULL));
   
   int num = rand() % (max - min) + min;
     return num;
 };
+
+
+
+
+
+
 
 
 
@@ -45,7 +51,7 @@ float determinant3x3(float B[3][3]){
 };
 
 
-float inverse3x3(float A[3][3],int det){
+float inverse3x3(float A[3][3], int det){
 
   int i,j;
 
@@ -57,3 +63,13 @@ float inverse3x3(float A[3][3],int det){
   return A[i][j];
 };
 
+
+void displayMatr(int N, float A[][N]){
+  printf("\n\n Εμφάνιση τυχαίου πίνακα %d*%d\n",N,N);
+  for (int i = 0; i < N; i++) {
+    printf("\n");
+    for (int j = 0; j < N ; j++) {
+      printf("\t%5.6f",A[i][j]);
+    }
+  }
+};
