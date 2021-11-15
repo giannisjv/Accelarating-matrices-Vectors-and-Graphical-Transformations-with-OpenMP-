@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "/home/giannis/Dropbox/Πτυχιακή/myLibs/ragnlib.h"
-#include "/home/giannis/Dropbox/Πτυχιακή/myLibs/colib.h"
+#include "../myLibs/ragnlib.h"
+#include "../myLibs/colib.h"
 
 //#define N 250
 int main(int argc, char const *argv[]) {
