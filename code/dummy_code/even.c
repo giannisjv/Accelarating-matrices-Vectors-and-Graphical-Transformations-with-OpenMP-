@@ -1,19 +1,11 @@
-#include<stdio.h>
-#define N 20
+#include <stdio.h>
+#include <stdlib.h>
+//#define N 20
 int main(){
 
-float num1, det, res;
+int num1 = 15 , n2= -10, n3 = -10 , res;
 
-printf("\nGive the det\t");
-scanf("%f",&det);
-while(1 == 1){
-
-printf("\nGive the 2\t");
-scanf("%f",&num1);
-
-res = num1 / det;
-printf("res: %5.2f\n",res);
-
-}
+res = (abs(num1) - abs(n2)) / abs(n3);
+printf("\n%d\n",res);
   return 0;
 }

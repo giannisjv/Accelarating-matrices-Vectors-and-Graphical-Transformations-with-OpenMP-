@@ -123,7 +123,6 @@ displayMatr(N, A);
 //Ad[k][p] =   determinant3x3(matrix1);
 
 
-    printf("\n\n Εμφάνιση του πίνακα matrix1 %d*%d\n",M,M);
     displayMatr(M, matrix1);
       
  printf("\n\n");
@@ -147,7 +146,7 @@ displayMatr(N, A);
 			   }
 		  }
 	 }
-
+ displayMatr(M, matrix1);
 //printf("\n\n");
  /*for matrix equals to 1 we multiply the main diagonal.
    If any element of the main diagonal is zero

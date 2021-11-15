@@ -1,16 +1,15 @@
     #include<stdio.h>
-
     #include<math.h>
 
-    float determinant(float [][25], float);
+    #define N 50
+
+    float determinant(float [][N], float);
 
     void cofactor(float [][25], float);
 
     void transpose(float [][25], float [][25], float);
 
-    int main()
-
-    {
+    int main(){
 
       float a[25][25], k, d;
       int i, j;
