@@ -57,3 +57,40 @@ float inverse3x3(float A[3][3],int det){
   return A[i][j];
 };
 
+
+/*
+float determinant(int N, float A[N][N]){
+      
+      float s = 1, det = 0, b[N][N];
+      int i, j, m, n, c;
+      
+      if (N == 1){
+         return (A[0][0]);
+        } else {
+         det = 0;
+         
+         for (c = 0; c < N; c++){
+            m = 0;
+            n = 0;
+            for (i = 0;i < N; i++){
+                for (j = 0 ;j < N; j++){
+                    
+                    b[i][j] = 0;
+                    
+                    if (i != 0 && j != c){
+                       b[m][n] = A[i][j];
+                       if (n < (N - 2))
+                        n++;
+                       else{
+                         n = 0;
+                         m++;
+          }
+       }
+    }
+}
+           det = det + s * (A[0][c] * determinant(b, N - 1));
+              s = -1 * s;
+            }
+        }
+        return (det);
+         }; */

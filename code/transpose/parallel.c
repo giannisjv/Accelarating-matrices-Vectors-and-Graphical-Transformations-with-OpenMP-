@@ -19,7 +19,7 @@ int main(int argc, char const *argv[]) {
   int CPUS[NN], N[NN] , metr, mat=0;
   double Metrics[NN];
   int i, j, l, counter = 0;
-  int loop_start = 10000, loop_end = 100000, loop_step = 10000;
+  int loop_start = 1000, loop_end = 10000, loop_step = 1000;
 
 
 
