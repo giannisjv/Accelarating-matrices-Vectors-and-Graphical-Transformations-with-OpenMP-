@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 
 
 #include "../myLibs/colib.h"
@@ -9,7 +10,7 @@
 #define N 4
 #define M N-1
 
-
+/*
 // Functions
 void displayMatr(float A[N][N]){
   printf("\n\n Εμφάνιση τυχαίου πίνακα %d*%d\n",N,N);
@@ -20,11 +21,11 @@ void displayMatr(float A[N][N]){
     }
   }
 }
-
+*/
 
 int main(){
 
-    float ratio, det, det_temp;
+    float ratio, det, det_temp, division;
     float A[N][N], matrix[N][N], Ad[N][N] ,inverse[N][N];
     float matrix1[M][M], temp[N][N];
     int i, j, k, p;
@@ -41,7 +42,7 @@ for(i=0; i<N;i++){
 }
 
 // Showing the random matrix
-displayMatr(A);
+displayMatr(N, A);
 
 
   printf("\n\n");
@@ -144,13 +145,7 @@ int y = -1;
 //Ad[k][p] =   determinant3x3(matrix1);
 
 
-    printf("\n\n Εμφάνιση του πίνακα matrix1 %d*%d\n",M,M);
-      for (i = 0; i < M; i++) {
-        printf("\n" );
-        for (j = 0; j < M; j++) {
-            printf("%5.2f",matrix1[i][j]);
-        }
-      }
+    displayMatr(M, matrix1);
  printf("\n\n");
     // Conversion of matrix to upper triangular
 
@@ -225,7 +220,24 @@ printf("\n");
   by that we will have the inverse matrix */
     for(i=0; i<N; i++){
       for (j = 0; j < N; j++) {
-        inverse[i][j] = Ad[i][j]/det;
+        division = 0.0;
+        if(Ad[i][j] < 0 && det < 0){
+            division = (fabs(Ad[i][j])) / (fabs(det));
+            inverse[i][j] = division;
+        
+          }else if(Ad[i][j] < 0 && det > 0){
+          division = (fabs(Ad[i][j])) / (fabs(det));
+            inverse[i][j] =  0 - division;
+      
+          }else if(Ad[i][j] > 0 && det < 0){
+          division = (fabs(Ad[i][j])) / (fabs(det));
+            inverse[i][j] = 0 - division;
+          
+          }else if(Ad[i][j] > 0 && det > 0){
+          division = (fabs(Ad[i][j])) / (fabs(det));
+            inverse[i][j] = division;
+      }
+
       }
     }
 
