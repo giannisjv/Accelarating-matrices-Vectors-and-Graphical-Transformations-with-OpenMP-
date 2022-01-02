@@ -13,7 +13,7 @@ double randomGenFloat(double min, double max){
 
 //randomness function
 int randomGenInteger(int min, int max){
-srand(time(NULL));
+
   
   int num = rand() % (max - min) + min;
     return num;
@@ -56,4 +56,28 @@ float inverse3x3(float A[3][3],int det){
   }
   return A[i][j];
 };
+/*
+void displayfl(float A, int N) {
 
+  for (int i = 0; i < N; i++) {
+    printf("\n");
+    for (int j = 0; j < N; j++) {
+      printf("\t%.6f",A[i][j] );
+    }
+  }
+  printf("\n\n-----------------------------\n");
+  printf("End of display function\n");
+};  
+
+void displayIn(int A, int N) {
+
+  for (int i = 0; i < N; i++) {
+    printf("\n");
+    for (int j = 0; j < N; j++) {
+      printf("\t%d",A[i][j] );
+    }
+  }
+  printf("\n\n-----------------------------\n");
+  printf("End of display function\n");
+};
+*/
