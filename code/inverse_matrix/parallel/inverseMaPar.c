@@ -11,15 +11,7 @@
 
 
 // Functions
-void displayMatr(float A[N][N]){
-  printf("\n\n Εμφάνιση τυχαίου πίνακα %d*%d\n",N,N);
-  for (int i = 0; i < N; i++) {
-    printf("\n");
-    for (int j = 0; j < N ; j++) {
-      printf("\t%5.2f",A[i][j]);
-    }
-  }
-}
+
 
 
 int main(){
@@ -27,8 +19,9 @@ int main(){
     float ratio, det, det_temp;
     float A[N][N], matrix[N][N], Ad[N][N] ,inverse[N][N];
     float matrix1[M][M], temp[N][N];
-    int i, j, k, p;
+    int i, j, k, p, x, y;
     int c;
+    int flag;
     srand(time(NULL));
 
 printf("\n\n");
@@ -41,7 +34,7 @@ for(i=0; i<N;i++){
 }
 
 // Showing the random matrix
-displayMatr(A);
+displayMatr(N, A);
 
 
   printf("\n\n");
@@ -69,17 +62,10 @@ displayMatr(A);
 
 // Printing The upper triangular Matrix just to be sure no error occured
  printf("\n\n Εμφάνιση του Ανω τριγωνικού πίνακα!\n");
-  for (int i = 0; i < N; i++) {
-    printf("\n");
-    for (int j = 0; j < N ; j++) {
-      printf("\t%5.2f",matrix[i][j]);
-    }
-  }
+ 
+ displayMatr(N, matrix);
 
-
-
-
-printf("\n\n");
+  printf("\n\n");
  /*for matrix equals to 1 we multiply the main diagonal.
    If any element of the main diagonal is zero
     we will have 0 as determinant and the inversion will not be available.*/
@@ -89,10 +75,15 @@ printf("\n\n");
         det *= matrix[i][i];
     printf("\tThe determinant of matrix is: %4.2f\n\n", det);
     // Countinue from here the attempt to find the adjustible matrix
+
+    /* private(x, y, i, j, p, k, c, ratio, temp, det_temp)  */
       
-    
+    #pragma omp parallel for collapse(2) schedule (static) num_threads(2) private(x, y, i, j, p, k, c, ratio, temp, det_temp) shared(matrix, matrix1, det, Ad)
       for (p = 0; p < N; p++) {
-        for (k = 0; k < N; k++) {
+        for (k = 0; k < N; k++) { 
+          /*p, k πρεπει σίγουρα να ειναι private,
+          επείδη κάθε thread πρεπει να επίλεγει τις γραμμες και τις στηλες που θέλει*/
+
 
  //printf(RED"\nΜηδενίζουμε τα στοιχεία %2d,%2d του πίνακα\n"RESET,p,k );
 
@@ -108,21 +99,9 @@ printf("\n\n");
     }
    }
   }
-/*
-    printf("\n\n Εμφάνιση του πίνακα temp!\n");
-    for (i = 0; i < N; i++) {
-      printf("\n");
-      for (j = 0; j < N ; j++) {
-        if (temp[i][j] == 0){
-        printf(YEL"\t%5.2f"RESET,temp[i][j]);
-      } else{
-          printf(RED"\t%5.2f"RESET,temp[i][j]);}
 
-      }
-    }
-*/
-int x = 0;
-int y = -1;
+  x = 0;
+  y = -1;
     for (i = 0; i < N; i++) {
       for (j = 0; j < N; j++) {
 
@@ -144,13 +123,8 @@ int y = -1;
 //Ad[k][p] =   determinant3x3(matrix1);
 
 
-    printf("\n\n Εμφάνιση του πίνακα matrix1 %d*%d\n",M,M);
-      for (i = 0; i < M; i++) {
-        printf("\n" );
-        for (j = 0; j < M; j++) {
-            printf("%5.2f",matrix1[i][j]);
-        }
-      }
+    displayMatr(M, matrix1);
+      
  printf("\n\n");
     // Conversion of matrix to upper triangular
 
@@ -158,7 +132,7 @@ int y = -1;
         if (matrix1[i][i] == 0.0) {
 			   printf("\n\nOne element of the main diagonal is 0 (zero!) You can't procced!\n\n");
          printf("The element is x=(%d), y=(%d), value=(%d)\n",i,j,matrix1[i][j] );
-			   return -1;
+			   break;
 
     }
   }
@@ -172,22 +146,7 @@ int y = -1;
 			   }
 		  }
 	 }
-
-
-/*
-// Printing The upper triangular Matrix just to be sure no error occured
-printf("\n\n\tUpper triangular Matrix\n\n");
-    for(i = 0; i < M; i++){
-      printf("\n");
-        for(j = 0; j < M; j++){
-            //scanf("%f", &matrix[i][j]);
-            printf("%5.2f\t",matrix1[i][j]);
-        }
-    }
-*/
-
-
-
+ displayMatr(M, matrix1);
 //printf("\n\n");
  /*for matrix equals to 1 we multiply the main diagonal.
    If any element of the main diagonal is zero
@@ -211,14 +170,9 @@ Ad[k][p] = det_temp;
 
  //Showing the ad Matrix
  printf("\nPrinting of the  adjugate matrix!!\n");
-    for(i=0; i<N; i++){
-      printf("\n");
-      for (j = 0; j < N; j++) {
-        printf("%5.6f\t",Ad[i][j]);
-      }
-    }
-
-printf("\n");
+ displayMatr(N, Ad);
+  
+  printf("\n");
 
 
  /*For every element of the First matrix we will divide by the determinant
@@ -231,14 +185,8 @@ printf("\n");
 
     //Showing the inversed Matrix
     printf("\nPrinting of the multiplication method matrix!!\n");
-    for(i=0; i<N; i++){
-      printf("\n");
-      for (j = 0; j < N; j++) {
-        printf("%5.6f\t",inverse[i][j]);
-      }
-    }
-
-
+    displayMatr(N, inverse);
+ 
 printf("\n");
     return 0;
 }

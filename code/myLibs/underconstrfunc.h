@@ -24,15 +24,5 @@ return B[size][size];
 };
 
 
-void display(float A, int N) {
 
-  for (int i = 0; i < N; i++) {
-    printf("\n");
-    for (int j = 0; j < N; j++) {
-      printf("\t%d",A[i][j] );
-    }
-  }
-  printf("\n\n-----------------------------\n");
-  printf("End of display function\n");
-};
 

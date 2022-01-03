@@ -86,7 +86,7 @@ for (i = 0; i <N; i++) {
       }
 
 
-    printf(RESET"\n\nTime tooks to run sequencialy " GRN "%6.6f"RESET" errors where appeared "BLU" %2d\n"RESET,CPU_time,counter);
+    printf(RESET"\n\nTime needs to run sequencialy " GRN "%6.6f"RESET" errors where appeared "BLU" %2d\n"RESET,CPU_time,counter);
     printf("\n");
 // Freeing Matrices from RAM
 free(A);
