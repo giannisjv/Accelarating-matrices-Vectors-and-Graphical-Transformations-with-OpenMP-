@@ -1,10 +1,10 @@
 
-<<<<<<< HEAD
 // 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 //
+
 //randomness function
-=======
+
 //randomness function floating Point
->>>>>>> fcd01881a510318c32d9c8ee30e7d52d0d9bb866
+
 
 
 double randomGenFloat(double min, double max){
@@ -70,7 +70,7 @@ float inverse3x3(float A[3][3], int det){
 /*
 void displayfl(float A, int N) {
 
-<<<<<<< HEAD
+
   for (int i = 0; i < N; i++) {
     printf("\n");
     for (int j = 0; j < N; j++) {
@@ -83,7 +83,6 @@ void displayfl(float A, int N) {
 
 void displayIn(int A, int N) {
 
-<<<<<<< HEAD
 
 /*
 float determinant(int N, float A[N][N]){
@@ -120,8 +119,8 @@ float determinant(int N, float A[N][N]){
             }
         }
         return (det);
-         }; */
-=======
+         }; 
+
   for (int i = 0; i < N; i++) {
     printf("\n");
     for (int j = 0; j < N; j++) {
@@ -131,8 +130,7 @@ float determinant(int N, float A[N][N]){
   printf("\n\n-----------------------------\n");
   printf("End of display function\n");
 };
-*/
-=======
+
 
 void displayMatr(int N, float A[][N]){
   printf("\n\n Εμφάνιση τυχαίου πίνακα %d*%d\n",N,N);
@@ -143,5 +141,5 @@ void displayMatr(int N, float A[][N]){
     }
   }
 };
->>>>>>> fcd01881a510318c32d9c8ee30e7d52d0d9bb866
->>>>>>> 2eb6d62089d585abd1dca4256b5b4ff349bf8b51
+
+*/

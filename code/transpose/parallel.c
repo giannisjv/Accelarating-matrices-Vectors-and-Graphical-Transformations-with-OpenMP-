@@ -19,15 +19,10 @@ int main(int argc, char const *argv[]) {
   int CPUS[NN], N[NN] , metr, mat=0;
   double Metrics[NN];
   int i, j, l, counter = 0;
-<<<<<<< HEAD:code/transpose/parallel.c
+
   int loop_start = 1000, loop_end = 10000, loop_step = 1000;
-=======
-<<<<<<< HEAD
-  int loop_start = 1000, loop_end = 10000, loop_step = 1000;
-=======
-  int loop_start = 100, loop_end = 1000, loop_step = 100;
->>>>>>> fcd01881a510318c32d9c8ee30e7d52d0d9bb866
->>>>>>> 2eb6d62089d585abd1dca4256b5b4ff349bf8b51:code/transpose/Inverparallel.c
+
+
 
 
 
@@ -139,15 +134,10 @@ free(B);
 printf("------------------------------------");
 printf("\n   N, CPU,\tTime");
 for(i=0; i< NN; i++){
-<<<<<<< HEAD
 printf("\n%d, %d, %6.6f",N[i],CPUS[i],Metrics[i]);
 }
 printf("------------------------------------");
 printf("\n");
-=======
-printf("\n%2d, %d, %6.6f",N[i],CPUS[i],Metrics[i]);
-}
-printf("\n------------------------------------\n");
->>>>>>> fcd01881a510318c32d9c8ee30e7d52d0d9bb866
+
   return 0;
 }
