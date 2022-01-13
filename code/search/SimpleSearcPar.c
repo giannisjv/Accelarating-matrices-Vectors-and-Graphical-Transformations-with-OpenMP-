@@ -6,7 +6,7 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-//#define N 20000
+//#define N 25000
 
 
 
@@ -99,7 +99,7 @@ printf("\n\n");
 }
  for ( i = 0; i < 40; i++)
  {
-     printf(GRN"%d"RESET"--->Cores "RED"%d"RESET", plurality "YEL"%d"RESET", metrics "MAG"%5.6f"RESET"\n",i+1, Cores[i], plurality[i], metrics[i]);
+     printf(GRN"%2d"RESET"--->Cores "RED"%d"RESET", plurality "YEL"%d"RESET", metrics "MAG"%5.6f"RESET"\n",i+1, Cores[i], plurality[i], metrics[i]);
      counter2++;
      if(counter2 == 4 ){
          printf("\n");
