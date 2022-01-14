@@ -1,16 +1,15 @@
     #include<stdio.h>
     #include<math.h>
 
-<<<<<<< HEAD
+
     #include "../myLibs/functions.h"
 
 #define N 10
    // float determinant(float [][25], float);
-=======
-    #define N 50
+
 
     float determinant(float [][N], float);
->>>>>>> 2eb6d62089d585abd1dca4256b5b4ff349bf8b51
+
 
     void cofactor(float [][25], float);
 
