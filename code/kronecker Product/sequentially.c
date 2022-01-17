@@ -12,7 +12,8 @@ int main(int argc, char const *argv[])
 {
     // Defining 3 arrays as pointers for use with malloc
     int **A, **B, **C;
-    int i, j, p, k, s, f;
+    int i, j, p, k, s = 0, f = -1;
+    int tempj = 0;
     int NN;
     int counter = 0;
     srand(time(NULL));
@@ -52,46 +53,37 @@ int main(int argc, char const *argv[])
                     B[i][j] = randomGenInteger(-10, 10);
                 }
             }
-/*
-        for (i = 0; i < NN; i++){
-         for ( j = 0; j < NN; j++){
-             for ( p = 0; p < N; p++){
-                 for ( k = 0; k < N; k++){
-                    if(s != N && f != N){
-                        C[i][j] = A[p][k] * B[s++][f++]; 
-                        //printf("\ntimh C %d timh A %d, timh B %d\n", C[i][j], A[p][k], B[s][f]);
-                 } else{
-                     s = 0; 
-                     f = 0;
-                 } 
-
-               }
-             } 
-         }
-         
-    }
-        
-
-*/
-        for ( i = 0; i < N; i++){
+   
+      for ( i = 0; i < N; i++){
             for ( j = 0; j < N; j++){
-                
                 for ( p = 0; p < N; p++){
                     for ( k = 0; k < N; k++){
-                        counter = 0;
-                        s = 0;
-                        f = 0;
-                        if(counter != N * N){
-                                C[p][k] = A[i][j] * B[s][f];
-                                counter++; // counter will initiate again when will be equal to N * N 
-             } // end for f
-            } // end for s
-          } // end if
+                        /*
+                        if( k > N){
+                            tempj = j--;
+                                C[p][k] = A[i][j++] * B[p][k];
+                                printf("\n\ni %d, j %d, p %d, k %d\n A %d, B %d, C %d",i, j, p, k, A[i][j] , B[p][k], C[p][k]);
+                                printf("\n eimai i prwti if");
+                         } // end if (k > N)*/
+                        if (k < N){
+                            tempj = j--;
+                                C[s][f++] = (A[i][j++]) * (B[p][k]);
+                                printf("\n\ni %d, j %d, p %d, k %d, s %d, f %d\n A %d, B %d, C %d",i, j, p, k, s, f, A[i][j] , B[p][k], C[p][k]);
+                                printf("\n eimai i deyteri if");
+                                if(f == (N - 1)){
+                                    s++;
+                                    f = -1;
+                                    
+           }
+          } // end of else if (k > N)
          } // end for k      
         } // end for p
        } // end for j
       } // end for i
         
+
+
+
 //Display matrix A
 printf("\n\n");
 printf("Matrix A\n");
@@ -105,7 +97,7 @@ printf("Matrix A\n");
 
 //Display matrix B
 printf("\n\n");
-printf("Matrix A\n");
+printf("Matrix B\n");
         for (i = 0; i < N; i++){
             printf("\n");
             for (j = 0; j < N; j++){
