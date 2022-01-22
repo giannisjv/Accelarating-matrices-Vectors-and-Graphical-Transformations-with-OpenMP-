@@ -12,7 +12,7 @@ int main(int argc, char const *argv[])
 {
     // Defining 3 arrays as pointers for use with malloc
     int **A, **B, **C;
-    int i, j, p, k, s = 0, f = -1;
+    int i = 0, j = 0, p = 0, k = -1, s, f;
     int temps;
     int NN;
     int counter = 0;
@@ -54,8 +54,8 @@ int main(int argc, char const *argv[])
                 }
             }
    
-      for ( i = 0; i < NN; i++){
-            for ( j = 0; j < NN; j++){
+     // for ( i = 0; i < N; i++){
+           // for ( j = 0; j < N; j++){
                 /*for ( p = 0; p < N; p++){
                     for ( k = 0; k < N; k++){
                         /*
@@ -67,21 +67,27 @@ int main(int argc, char const *argv[])
                          } // end if (k > N)*/
                        
                        // if (k < N){
-                                
-                                C[i][j] = (A[s][f]) * (B[p][k++]);
-                                printf("\n\ni %d, j %d, p %d, k %d, s %d, f %d\n A %d, B %d, C %d",i, j, p, k, s, f, A[i][j] , B[p][k], C[p][k]);
-                               //printf("\n eimai i deyteri if");
-                                if(f == N - 1){
-                                    s++;
-                                    f = -1;
-                                }
-                               
-            
+                                    for(s = 0; s < N; s++){
+                                        for (f = 0; f < N; f++){
+                                             if (k == (N -1)){
+                                   j++;
+                               }else if(k == (NN -1)){
+                                    p++;
+                                    k = -1;
+                                    i++;
+                                    j = 0;
+                                } 
+                                            
+                                            C[p][k++] = (A[i][j]) * (B[s][f]);
+                                printf("\n\ni %d, j %d, p %d, k %d, s %d, f %d\n A %d, B %d, C %d",i, j, p, k, s, f, A[i][j] , B[s][f], C[p][k]);
+                                    
+                            } 
+                        }
          // } // end of else if (k > N)
         // } // end for k      
        // } // end for p
-       } // end for j
-      } // end for i
+     //  } // end for j
+  //    } // end for i
         
 
 
