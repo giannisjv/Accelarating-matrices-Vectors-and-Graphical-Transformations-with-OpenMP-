@@ -6,18 +6,21 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define N 2
-#define M 2
+#define N 200
+#define M 150
+#define cores 8
 
 int main(int argc, char const *argv[])
 {
     // Defining 3 arrays as pointers for use with malloc
     int **A, **B, **C; //
-    int i, j, s, f;
+    int i, j, s, f, c;
     int ARow, ACol, BRow, BCol ,CRow, CCol, stRow, stCol;
     int NN = N * N;
-    time_t seqStart, Seq_End;
-    double CPU_time;
+    time_t SeqStart, SeqEnd;
+    
+    double CPU_time = 0.0;
+    double Start = 0.0, Stop =0.0;
     srand(time(NULL));
     
     // Making the Matrices Dynamicly by the user...
@@ -96,8 +99,8 @@ int main(int argc, char const *argv[])
                     B[i][j] = randomGenInteger(-10, 10);
             }
                 }
-   
-                    seqStart = clock(); // starting the timer 
+
+                SeqStart = clock(); // starting the timer 
                      for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
                         for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
                             stRow = i * BRow; // Matrix C ROW is "i" multiplied by the cardinality of Rows from the second Matrix 
@@ -110,10 +113,32 @@ int main(int argc, char const *argv[])
                           }
                                 }
                                     }
-            Seq_End = clock(); 
-            CPU_time = Seq_End - seqStart;
-            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was %5.6f\n\n",ARow, BRow, ACol, BCol, CPU_time/CLOCKS_PER_SEC);
+            SeqEnd = clock(); 
+            CPU_time = SeqEnd - SeqStart;
+            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was %5.6f sequencialy\n\n",ARow, BRow, ACol, BCol, CPU_time/CLOCKS_PER_SEC);
 
+
+                for(c = 2; c <= cores; c*=2){
+                    Start = omp_get_wtime();
+                     #pragma omp parallel for collapse(2) schedule(static) num_threads(c) private(i, j, s, f)
+                     for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
+                        for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
+                            stRow = i * BRow; // Matrix C ROW is "i" multiplied by the cardinality of Rows from the second Matrix 
+                            stCol = j * BCol; // Matrix C Column is "j" multiplied by the cardinality of Columns from the second Matrix
+                                for ( s = 0; s < BRow; s++){ // s from 0 to cardinality of ROWS from the second Matrix
+                                     for ( f = 0; f < BCol; f++){ // f from 0 to cardinality of Columns from the second Matrix
+                                        C[stRow+s][stCol+f] = (A[i][j]) * (B[s][f]);
+                                            // printf("\n\ni %d, j %d, s %d, f %d, Crow %d, Ccol %d",i, j, s, f, CRow+s, CCol+f);
+                     }
+                          }
+                                }
+                                    }
+                                    Stop = omp_get_wtime();
+
+            CPU_time = Stop - Start;
+            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was (%5.6f) the cores used was (%d) \n\n",ARow, BRow, ACol, BCol, CPU_time, c);
+                }
+/*
 //Display matrix A
 printf("\n\n");
 printf("Matrix A\n");
@@ -148,7 +173,7 @@ printf("Matrix C\n");
             } 
 
 
-
+*/
     free(A);
     free(B);
     free(C);
