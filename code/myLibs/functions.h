@@ -26,12 +26,6 @@ int randomGenInteger(int min, int max){
 
 
 
-
-
-
-
-
-
 float determinant2x2(float A[2][2], int a, int b){
 
 float det;
@@ -67,6 +61,27 @@ float inverse3x3(float A[3][3], int det){
   }
   return A[i][j];
 };
+
+void display(int *a, int size){
+
+    for (int i = 0; i <size; i++)
+    {
+      printf("%d\n",a[i]);
+    }
+    
+}
+
+void display2D(int **a, int size){
+   for (int i = 0; i <size; i++)
+    {
+      printf("\n");
+      for (int j = 0; j < size; j++)
+      {
+      printf("%d\t",a[i][j]);
+    }
+  }
+}
+
 /*
 void displayfl(float A, int N) {
 
