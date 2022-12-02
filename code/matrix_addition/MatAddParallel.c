@@ -1,4 +1,4 @@
-/* serial program -- Σειριακός Αλγόριθμος
+/* Parallel alogorithm -- Παράλληλος Αλγόριθμος
 Vidras Ioannis - University of Thessaly - Computer Enginnering - 4414002
 
 Η πρόσθεση πινάκων είναι ίσως η πιο απλή πράξη πινάκων,
@@ -111,7 +111,7 @@ int main(){
 	printf("\n\t\t\t\t C Array \n\n");
 */
 
-	for(c=1; c<=cores; c*=2){
+	for(c=1; c<=cores; c *= 2){
 	start = omp_get_wtime();
 	#pragma omp parallel num_threads(c)
 	{
@@ -127,7 +127,7 @@ int main(){
 					for (j=0;j<N;j++)
 				C[i][j] = A[i][j] + B[i][j];
 			}
-			
+
 		}
 	}
 	end = omp_get_wtime();
