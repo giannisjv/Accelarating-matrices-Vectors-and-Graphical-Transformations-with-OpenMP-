@@ -82,21 +82,27 @@ void display2D(int **a, int size){
   }
 }
 
-/*
-void displayfl(float A, int N) {
-
-
-  for (int i = 0; i < N; i++) {
-    printf("\n");
-    for (int j = 0; j < N; j++) {
-      printf("\t%.6f",A[i][j] );
+void display_2D_Non_Squered(int **a, int row, int column){
+   for (int i = 0; i <row; i++)
+    {
+      printf("\n");
+      for (int j = 0; j < column; j++)
+      {
+      printf("%d\t",a[i][j]);
     }
   }
-  printf("\n\n-----------------------------\n");
-  printf("End of display function\n");
-};  
+}
 
-void displayIn(int A, int N) {
+void scalar_matrix_corr(int **A, int **B, int N, int M, int Numb){
+int i, j;
+  for(i=0;i<N;i++){
+			for(j=0;j<M;j++){
+				if(B[i][j] != A[i][j] * Numb){
+					printf("number: (%d) thesi x: (%d), y: (%d) Expected number: (%d) \n",B[i][j], i,j,A[i][j]*Numb );
+				}
+			}
+		}
+}
 
 
 /*

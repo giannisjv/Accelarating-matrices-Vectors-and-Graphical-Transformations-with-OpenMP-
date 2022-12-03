@@ -29,6 +29,7 @@ The matrix addition as a result has a Matrix EQUAL to the others.
 #define loopMax  10000
 #define loopstep 1000
 #define cores 8
+#define N 10000
 
 int main(){
 
@@ -48,16 +49,10 @@ int main(){
     double time_takengu = 0.0;	
     		
 						
-	int i, j, c, N, chunk;									    // other variables 
+	int i, j, c, chunk;									    // other variables 
 	int counter = 0;
 
     printf("\n\t\tSerial\t\tStatic\t\tdynamic\t\tguided  \tchunk\t N\tCores");
-
-    for(int loop = loopMin; loop <= loopMax; loop+=loopstep)
-    {
-    
-	N = loop;
-
 
 	int **A, **B, **C;								    // allocating 3 double pointer variables
 	/*
@@ -128,7 +123,7 @@ int main(){
 
     printf("\n");
 	
-        //for ( chunk = 1; chunk < 10; chunk++){
+       // for ( chunk = 1; chunk < 10; chunk++){
             printf("\n");
            for(c=1; c<=cores; c *= 2){
 	#pragma omp parallel num_threads(c)
@@ -143,7 +138,7 @@ int main(){
             end = omp_get_wtime();
 		}	else{
             staticSt = omp_get_wtime();
-			#pragma omp parallel for collapse(2) schedule(static, chunk) num_threads(c) private(i,j) 
+			#pragma omp parallel for collapse(2) schedule(static)num_threads(c) private(i,j) 
 				for(i=0;i<N;i++){
 					for (j=0;j<N;j++)
 				C[i][j] = A[i][j] + B[i][j];
@@ -151,7 +146,7 @@ int main(){
             staticEn = omp_get_wtime();
             
             dynamicSt = omp_get_wtime();
-            #pragma omp parallel for collapse(2) schedule(dynamic, chunk) num_threads(c) private(i,j) 
+            #pragma omp parallel for collapse(2) schedule(dynamic) num_threads(c) private(i,j) 
 				for(i=0;i<N;i++){
 					for (j=0;j<N;j++)
 				C[i][j] = A[i][j] + B[i][j];
@@ -159,7 +154,7 @@ int main(){
             dynamicEn = omp_get_wtime();
             
             guidedSt = omp_get_wtime();
-            #pragma omp parallel for collapse(2) schedule(guided, chunk) num_threads(c) private(i,j) 
+            #pragma omp parallel for collapse(2) schedule(guided) num_threads(c) private(i,j) 
 				for(i=0;i<N;i++){
 					for (j=0;j<N;j++)
 				C[i][j] = A[i][j] + B[i][j];
@@ -195,7 +190,7 @@ int main(){
 		free(A);
 		free(B);
 		free(C);
-}
+
 printf("\n%d\n",counter);
 printf("\n");
 
