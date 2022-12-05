@@ -103,7 +103,17 @@ int i, j;
 			}
 		}
 }
-
+void transpose(int **a, int **b, int N){
+for (int i = 0; i < N; i++)
+{
+  for (int  j = 0; j < N; j++)
+  {
+    if(b[i][j] != a[j][i]){
+					printf("number: (%d) thesi x: (%d), y: (%d) Expected number: (%d) \n",b[i][j], i, j, a[j][i]);
+      }
+    }
+  }
+}
 
 /*
 float determinant(int N, float A[N][N]){

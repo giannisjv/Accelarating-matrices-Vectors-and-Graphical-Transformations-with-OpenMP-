@@ -73,21 +73,18 @@ int main(){
 	 }
 
 	 printf("\n\t\tSerial\t\tStatic\t\tdynamic\t\tguided  \tchunk\t N\tCores");
-	 for ( chunk = 1; chunk < 10; chunk++){
-            printf("\n");
+	 for ( chunk = 1024; chunk <= 4096; chunk*=2){
+           printf("\n");
            for(c=1; c<=cores; c *= 2){
-#pragma omp parallel num_threads(c)
-	{
             start = omp_get_wtime();
-	#pragma omp master
-		if (c == 1){
-				 for(i=0;i<N;i++){									        // first "for" for rows
- 	    			for(j=0;j<M;j++){							        	// second "for" for columns
- 			B[i][j] = A[i][j] * Multiply_Numb;			// multiply every number of "A" with a number and send it to "B"
+				if (c == 1){
+					 for(i=0;i<N;i++){									        // first "for" for rows
+ 	    				for(j=0;j<M;j++){							        	// second "for" for columns
+ 				B[i][j] = A[i][j] * Multiply_Numb;			// multiply every number of "A" with a number and send it to "B"
  		 }
  	 }
 	 		end = omp_get_wtime();
-	}	else{
+	}			else{
             staticSt = omp_get_wtime();
 	#pragma omp parallel for collapse(2) schedule(static, chunk) num_threads(c) private(i,j) 
 				for(i=0;i<N;i++){									        // first "for" for rows
@@ -114,8 +111,7 @@ int main(){
  		 }
  	 }
             guidedEn = omp_get_wtime();
-    }
-}
+    	}
 /*
 display_2D_Non_Squered(A, N, M);
 printf("\n");
@@ -135,8 +131,7 @@ if(c == 1){
     }
 	printf("\n\t%15.6f, %15.6f,%15.6f, %15.6f, \t%d, \t%d, \t  %d",time_taken, time_takenSt, time_takedy, time_takengu, chunk, N, c);
     }
-
-	}
+}
 printf("\n");
 free(A);
 free(B);

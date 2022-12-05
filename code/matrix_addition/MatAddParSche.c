@@ -29,7 +29,7 @@ The matrix addition as a result has a Matrix EQUAL to the others.
 #define loopMax  10000
 #define loopstep 1000
 #define cores 8
-#define N 10000
+#define N 25000
 
 int main(){
 
@@ -123,22 +123,29 @@ int main(){
 
     printf("\n");
 	
-       // for ( chunk = 1; chunk < 10; chunk++){
-            printf("\n");
+   for ( chunk = 1; chunk <= 4096; chunk *=2 ){
+	   printf("\n");
+	start = 0.0, end = 0.0;                         // Start and end time
+
+    staticSt = 0.0, staticEn = 0.0;
+                              // variable to mesure the time algorith took to run 
+    dynamicSt = 0.0, dynamicEn = 0.0;
+    
+    guidedSt = 0.0, guidedEn = 0.0;
            for(c=1; c<=cores; c *= 2){
-	#pragma omp parallel num_threads(c)
-	{
+			if(c == 1){
             start = omp_get_wtime();
-			#pragma omp master
-			if (c == 1){
-				for(i=0;i<N;i++){
-					for (j=0;j<N;j++)
-				C[i][j] = A[i][j] + B[i][j];
-		}
-            end = omp_get_wtime();
+				for ( i = 0; i < N; i++)
+				{
+					for ( j = 0; j < N; j++)
+					{
+						C[i][j] = A[i][j] + B[i][j];
+					}
+				}
+		    end = omp_get_wtime();
 		}	else{
             staticSt = omp_get_wtime();
-			#pragma omp parallel for collapse(2) schedule(static)num_threads(c) private(i,j) 
+			#pragma omp parallel for collapse(2) schedule(static)num_threads(c)
 				for(i=0;i<N;i++){
 					for (j=0;j<N;j++)
 				C[i][j] = A[i][j] + B[i][j];
@@ -146,7 +153,7 @@ int main(){
             staticEn = omp_get_wtime();
             
             dynamicSt = omp_get_wtime();
-            #pragma omp parallel for collapse(2) schedule(dynamic) num_threads(c) private(i,j) 
+            #pragma omp parallel for collapse(2) schedule(dynamic) num_threads(c)
 				for(i=0;i<N;i++){
 					for (j=0;j<N;j++)
 				C[i][j] = A[i][j] + B[i][j];
@@ -154,14 +161,12 @@ int main(){
             dynamicEn = omp_get_wtime();
             
             guidedSt = omp_get_wtime();
-            #pragma omp parallel for collapse(2) schedule(guided) num_threads(c) private(i,j) 
+            #pragma omp parallel for collapse(2) schedule(guided) num_threads(c)
 				for(i=0;i<N;i++){
 					for (j=0;j<N;j++)
 				C[i][j] = A[i][j] + B[i][j];
 			}
             guidedEn = omp_get_wtime();
-       }
-    }
 	// display2D(C, N);								            // Function to display Matrix C
 	if(c == 1){
 	time_taken = (end-start);
@@ -175,7 +180,7 @@ int main(){
 	printf("\n\t%15.6f, %15.6f,%15.6f, %15.6f, \t%d, \t%d, \t  %d",time_taken, time_takenSt, time_takedy, time_takengu, chunk, N, c);
 	counter++;
     }
-//}
+}
 	
 
 /*
@@ -196,8 +201,3 @@ printf("\n");
 
 return 0;
 }
-
-
-
-
-
