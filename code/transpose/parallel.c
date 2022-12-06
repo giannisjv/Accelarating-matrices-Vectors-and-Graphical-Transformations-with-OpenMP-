@@ -20,7 +20,7 @@ int main(){
 	 
 	srand(time(NULL));									// seed for random generator using current time
 
-	double start = 0.0, end = 0.0; 
+	time_t start,  end; 
     double time_taken = 0.0;	                        // Start and end time
 
     double staticSt = 0.0, staticEn = 0.0;
@@ -73,65 +73,66 @@ int main(){
 
 	printf("\n\t\tSerial\t\tStatic\t\tdynamic\t\tguided  \tchunk\t N\tCores");
 	
-  // for ( chunk = 1; chunk < 10; chunk++){
-    //        printf("\n");
-          c = 8;
-      staticSt = omp_get_wtime();
-	  #pragma omp parallel for collapse(2) num_threads((c)) schedule(static)
-				for(i=0;i<N;i++){									        // first "for" for rows
- 	    			for(j=0;j<M;j++){							        	// second "for" for columns
+  for ( chunk = 1; chunk <= 4096; chunk *=2){
+           printf("\n");
+      for ( c = 1; c <= cores; c *=2){
+		if(c == 1){
+			start = clock();
+			for(i=0;i<N;i++){									        // first "for" for rows
+ 	    			for(j=0;j<M;j++)							        	// second "for" for columns
  				B[i][j] = A[j][i]; 			// multiply every number of "A" with a number and send it to "B"
- 		 	}
+ 	 	}
+		end = clock();
+	}else{
+	  
+      staticSt = omp_get_wtime();
+	  #pragma omp parallel for collapse(2) num_threads(c) schedule(static, chunk)
+				for(i=0;i<N;i++){									        // first "for" for rows
+ 	    			for(j=0;j<M;j++)							        	// second "for" for columns
+ 				B[i][j] = A[j][i]; 			// multiply every number of "A" with a number and send it to "B"
  	 	}
       staticEn = omp_get_wtime();
             
       dynamicSt = omp_get_wtime();
-	  #pragma omp parallel for collapse(2) num_threads(c) schedule(dynamic)
+	  #pragma omp parallel for collapse(2) num_threads(c) schedule(dynamic, chunk)
 				for(i=0;i<N;i++){									        // first "for" for rows
- 	    			for(j=0;j<M;j++){							        	// second "for" for columns
+ 	    			for(j=0;j<M;j++)						        	// second "for" for columns
  			 B[i][j] = A[j][i];             			// multiply every number of "A" with a number and send it to "B"
- 		 }
  	 }
       dynamicEn = omp_get_wtime();
             
       guidedSt = omp_get_wtime();
-      #pragma omp parallel for collapse(2) num_threads(c) schedule(guided)
+      #pragma omp parallel for collapse(2) num_threads(c) schedule(guided, chunk)
 				for(i=0;i<N;i++){									        // first "for" for rows
- 	    			for(j=0;j<M;j++){							        	// second "for" for columns
+ 	    			for(j=0;j<M;j++)							        	// second "for" for columns
  				 B[i][j] = A[j][i];		     // for every B[i][j] Is Equal to A[j][i]
- 		 }
  	 }
       guidedEn = omp_get_wtime();
-/*
+}
+
 B[1][2] = 5;
 transpose(A, B, N);
 display_2D_Non_Squered(A, N, M);
 printf("\n");
 display_2D_Non_Squered(B, N, M);
-*/
-
 
 
 if(c == 1){
 	time_taken = (end-start);
+	time_taken /= CLOCKS_PER_SEC;
     time_takenSt = time_takedy = time_takengu = 0.0;
     } else{
-        time_taken = 0.0;
+    time_taken = 0.0;
     time_takenSt = (staticEn - staticSt);
     time_takedy = (dynamicEn - dynamicSt);
     time_takengu = (guidedEn - guidedSt);
     }
-	printf("\n\t%15.6f, %15.6f,%15.6f, %15.6f, \t%d, \t  %d",time_taken, time_takenSt, time_takedy, time_takengu, N, c);
-    //  }
+	printf("\n\t%15.6f, %15.6f,%15.6f, %15.6f,\t%d \t%d, \t  %d",time_taken, time_takenSt, time_takedy, time_takengu, chunk,  N, c);
+     }
 
-	//}
 printf("\n");
 free(A);
 free(B);
 
 return 0;
-		 }
-  
-  
-  
-  
+}
