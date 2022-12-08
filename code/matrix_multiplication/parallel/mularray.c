@@ -6,7 +6,7 @@
 #include "../../myLibs/functions.h"
 #include "../../myLibs/colib.h"
 
-#define cores 8
+#define cores 16
 #define min 1
 #define max 1000
 int main(int argc, char const *argv[]) {
@@ -29,12 +29,12 @@ int main(int argc, char const *argv[]) {
   
   
   int chunk, c;            // A variety of variables!
-  int i, j, p, l, sum = 0, counter = 0;
+  int i, j, p, l, sum = 0;
   int NA, MA, NB, MB;
   int **A, **B, **C;
   int RowsA, ColumnsA;
   int RowsB, ColumnsB;
-
+long int  counter = 0;
 /*
   printf("\n Insert First Matrix's Number of Rows: \n");   // Inserting the first Matrix
   scanf("%d",&NA);
@@ -48,7 +48,7 @@ int main(int argc, char const *argv[]) {
   scanf("%d",&MB);
 
   */
- NA = NB = MA = MB =10000;
+ NA = NB = MA = MB =2500;
 
   RowsA =  NA * sizeof(int *);
   ColumnsA = MA * sizeof(int);
@@ -95,28 +95,30 @@ int main(int argc, char const *argv[]) {
 
   printf("\n\t\tSerial\t\tStatic\t\tdynamic\t\tguided  \tchunk\t N\tCores");
 
-  //for ( chunk = 1; chunk <= 4096; chunk *= 2) {
+  for ( chunk = 1; chunk <= 4096; chunk *= 2) {
     printf("\n");
-    for(c = 2; c <= cores; c *= 2){
-    /*if(c == 1){
+    for(c = 1; c <= cores; c *= 2){
+    if(c == 1){
         start = clock();
       matrix_multi_serial(A, B, C, NA, MA, MA);
         end = clock();
-  } else{*/
+  } else{
       #pragma omp parallel num_threads(c)
      {
        staticSt = omp_get_wtime();
-      #pragma omp  for schedule(static) private(i, j, p, sum)
+      #pragma omp  for schedule(static) private(i, j, p, sum) reduction(+ : counter)
           for(i=0; i<NA; i++){
             for (j=0; j<MA; j++){
               sum = 0;
               for(p=0; p<MA; p++){
                  sum += A[i][p] * B[p][j];
+                  counter++;
               }
                  C[i][j] = sum;
                  sum = 0;
+                
           }
-        }
+        
        staticEn = omp_get_wtime();
         //matrix_multi_checker(A, B, C, NA, MA, MA);
        dynamicSt = omp_get_wtime();
@@ -149,21 +151,21 @@ int main(int argc, char const *argv[]) {
       guidedEn = omp_get_wtime();
 
       }
-    //}
+    }
     
    //matrix_multi_checker(A, B, C, NA, MA, MA);
-/*if(c == 1){
+if(c == 1){
 	time_taken = (end-start);
 	time_taken /= CLOCKS_PER_SEC;
     time_takenSt = time_takedy = time_takengu = 0.0;
     } else{
-    time_taken = 0.0;*/
+    time_taken = 0.0;
     time_takenSt = (staticEn - staticSt);
     time_takedy = (dynamicEn - dynamicSt);
     time_takengu = (guidedEn - guidedSt);
-    //}
+    }
 	printf("\n\t%15.6f, %15.6f,%15.6f, %15.6f,\t%d \t%d, \t  %d",time_taken, time_takenSt, time_takedy, time_takengu, chunk,  NA * MB, c);
-
+printf("\n\n counter %ld", counter);
       /*    -------------------------------------
              | print statements for the Matrices |
              -------------------------------------
@@ -177,7 +179,8 @@ int main(int argc, char const *argv[]) {
             display_2D_Non_Squered(C, NA, MB);
              matrix_multi_checker(A, B, C, NA, MA, MA);
              */
-    }    
+  }
+}    
              free(A);
              free(B);
              free(C);

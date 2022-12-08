@@ -14,7 +14,7 @@ double randomGenFloat(double min, double max){
   double num = 0.0;
   num = ((max - min) * ((double)rand() / RAND_MAX)) + min;
     return num;
-};
+}
 
 //randomness function integer
 int randomGenInteger(int min, int max){
@@ -22,7 +22,7 @@ int randomGenInteger(int min, int max){
   
   int num = rand() % (max - min) + min;
     return num;
-};
+}
 
 
 
@@ -60,7 +60,21 @@ float inverse3x3(float A[3][3], int det){
     }
   }
   return A[i][j];
-};
+}
+
+
+void display2d(int N, float A[N][N]){
+  for (int i = 0; i < N; i++)
+  {
+    printf("\n");
+    for (int j = 0; j < N; j++)
+    {
+      printf("%.6f\t",A[i][j]);
+    }
+  }
+  printf("\n");
+}
+
 
 void display(int *a, int size){
 
@@ -89,6 +103,17 @@ void display_2D_Non_Squered(int **a, int row, int column){
       for (int j = 0; j < column; j++)
       {
       printf("%d\t",a[i][j]);
+    }
+  }
+}
+
+void display_2D_Non_Squeredfloat(float **a, int row, int column){
+   for (int i = 0; i <row; i++)
+    {
+      printf("\n");
+      for (int j = 0; j < column; j++)
+      {
+      printf("%.2f\t",a[i][j]);
     }
   }
 }
@@ -154,62 +179,10 @@ void zero_matrix(int **c, int rowA, int columnB){
   }
 }
 
-/*
-float determinant(int N, float A[N][N]){
-      
-      float s = 1, det = 0, b[N][N];
-      int i, j, m, n, c;
-      
-      if (N == 1){
-         return (A[0][0]);
-        } else {
-         det = 0;
-         
-         for (c = 0; c < N; c++){
-            m = 0;
-            n = 0;
-            for (i = 0;i < N; i++){
-                for (j = 0 ;j < N; j++){
-                    
-                    b[i][j] = 0;
-                    
-                    if (i != 0 && j != c){
-                       b[m][n] = A[i][j];
-                       if (n < (N - 2))
-                        n++;
-                       else{
-                         n = 0;
-                         m++;
-          }
-       }
+float determinant_tri(int N, float A[N][N]){
+      float det = 1.0; //storage for determinant
+    for(int i = 0; i < N; i++){
+        det *= A[i][i]; // finding determinant by multiply trigonal matrix's main diagonal
     }
+ return det; 
 }
-           det = det + s * (A[0][c] * determinant(b, N - 1));
-              s = -1 * s;
-            }
-        }
-        return (det);
-         }; 
-
-  for (int i = 0; i < N; i++) {
-    printf("\n");
-    for (int j = 0; j < N; j++) {
-      printf("\t%d",A[i][j] );
-    }
-  }
-  printf("\n\n-----------------------------\n");
-  printf("End of display function\n");
-};
-
-
-void displayMatr(int N, float A[][N]){
-  printf("\n\n Εμφάνιση τυχαίου πίνακα %d*%d\n",N,N);
-  for (int i = 0; i < N; i++) {
-    printf("\n");
-    for (int j = 0; j < N ; j++) {
-      printf("\t%5.6f",A[i][j]);
-    }
-  }
-};
-
-*/

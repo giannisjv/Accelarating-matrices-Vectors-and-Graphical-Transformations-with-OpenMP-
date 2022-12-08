@@ -10,22 +10,9 @@
 #define N 4
 #define M N-1
 
-/*
-// Functions
-void displayMatr(float A[N][N]){
-  printf("\n\n Εμφάνιση τυχαίου πίνακα %d*%d\n",N,N);
-  for (int i = 0; i < N; i++) {
-    printf("\n");
-    for (int j = 0; j < N ; j++) {
-      printf("\t%5.2f",A[i][j]);
-    }
-  }
-}
-*/
-
 int main(){
 
-    float ratio, det, det_temp, division;
+    float ratio, det, det_temp, division, tempora;
     float A[N][N], matrix[N][N], Ad[N][N] ,inverse[N][N];
     float matrix1[M][M], temp[N][N];
     int i, j, k, p;
@@ -36,13 +23,21 @@ printf("\n\n");
 // Initiate the random matrix
 for(i=0; i<N;i++){
   for(j=0; j<N;j++){
-    A[i][j]= randomGenFloat(1.0,5.0);
+    A[i][j]= randomGenFloat(1.0, 5.0);
     matrix[i][j] = A[i][j];
   }
 }
 
-// Showing the random matrix
-displayMatr(N, A);
+  for ( i = 0; i < N; i++)
+  {
+    printf("\n");
+    for (j = 0; j < N; j++)
+    {
+      printf("%.6f\t",A[i][j]);
+    }
+    
+  }
+  
 
 
   printf("\n\n");
@@ -51,7 +46,7 @@ displayMatr(N, A);
       for ( i = 0; i < N; i++) {
         if (matrix[i][i] == 0.0) {
 			   printf("\n\nOne element of the main diagonal is 0 (zero!) You can't procced!\n\n");
-         printf("The element is x=(%d), y=(%d), value=(%d)\n",i,i,matrix[i][i] );
+         printf("The element is x=(%d), y=(%d), value=(%f)\n",i, i,matrix[i][i] );
 			   return -1;
         }
              for ( i = 0; i < N; i++) {
@@ -105,11 +100,17 @@ printf("\n\n");
                 temp[i][j] = 0.0;
        }
             else {
+               if((p + k) % 2 == 0){
               temp[i][j] = A[i][j];
+            } else{
+                tempora = A[i][j];
+                temp[i][j] = -tempora;
+              }
+        
+      }
     }
    }
-  }
-/*
+
     printf("\n\n Εμφάνιση του πίνακα temp!\n");
     for (i = 0; i < N; i++) {
       printf("\n");
@@ -121,7 +122,7 @@ printf("\n\n");
 
       }
     }
-*/
+
 int x = 0;
 int y = -1;
     for (i = 0; i < N; i++) {
@@ -142,17 +143,13 @@ int y = -1;
     }
   }
 
-//Ad[k][p] =   determinant3x3(matrix1);
-
-
-    displayMatr(M, matrix1);
  printf("\n\n");
     // Conversion of matrix to upper triangular
 
     for (i = 0; i < M; i++) {
         if (matrix1[i][i] == 0.0) {
 			   printf("\n\nOne element of the main diagonal is 0 (zero!) You can't procced!\n\n");
-         printf("The element is x=(%d), y=(%d), value=(%d)\n",i,j,matrix1[i][j] );
+         printf("The element is x=(%d), y=(%d), value=(%f)\n",i,j,matrix1[i][j] );
 			   return -1;
 
     }
@@ -215,8 +212,8 @@ Ad[k][p] = det_temp;
 
 printf("\n");
 
-
- /*For every element of the First matrix we will divide by the determinant
+/*
+For every element of the First matrix we will divide by the determinant
   by that we will have the inverse matrix */
     for(i=0; i<N; i++){
       for (j = 0; j < N; j++) {

@@ -1,8 +1,6 @@
-float determinant(float a[25][25], float k)
+float determinant(float a[25][25], float k){
 
-{
-
-  float s = 1, det = 0, b[25][25];
+float s = 1, det = 0, b[25][25];
 
   int i, j, m, n, c;
 
