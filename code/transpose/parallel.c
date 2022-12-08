@@ -16,7 +16,7 @@
 #define max 1000
 
 int main(){
-	 int Row_size, Column_size;
+	int Row_size, Column_size;
 	 
 	srand(time(NULL));									// seed for random generator using current time
 
@@ -85,8 +85,10 @@ int main(){
 		end = clock();
 	}else{
 	  
+	  #pragma omp parallel num_threads(c)
+	  {
       staticSt = omp_get_wtime();
-	  #pragma omp parallel for collapse(2) num_threads(c) schedule(static, chunk)
+	  #pragma omp  for collapse(2) schedule(static, chunk)
 				for(i=0;i<N;i++){									        // first "for" for rows
  	    			for(j=0;j<M;j++)							        	// second "for" for columns
  				B[i][j] = A[j][i]; 			// multiply every number of "A" with a number and send it to "B"
@@ -94,7 +96,7 @@ int main(){
       staticEn = omp_get_wtime();
             
       dynamicSt = omp_get_wtime();
-	  #pragma omp parallel for collapse(2) num_threads(c) schedule(dynamic, chunk)
+	  #pragma omp for collapse(2) schedule(dynamic, chunk)
 				for(i=0;i<N;i++){									        // first "for" for rows
  	    			for(j=0;j<M;j++)						        	// second "for" for columns
  			 B[i][j] = A[j][i];             			// multiply every number of "A" with a number and send it to "B"
@@ -102,20 +104,21 @@ int main(){
       dynamicEn = omp_get_wtime();
             
       guidedSt = omp_get_wtime();
-      #pragma omp parallel for collapse(2) num_threads(c) schedule(guided, chunk)
+      #pragma omp for collapse(2) schedule(guided, chunk)
 				for(i=0;i<N;i++){									        // first "for" for rows
  	    			for(j=0;j<M;j++)							        	// second "for" for columns
  				 B[i][j] = A[j][i];		     // for every B[i][j] Is Equal to A[j][i]
  	 }
       guidedEn = omp_get_wtime();
+	}
 }
-
+/*
 B[1][2] = 5;
 transpose(A, B, N);
 display_2D_Non_Squered(A, N, M);
 printf("\n");
 display_2D_Non_Squered(B, N, M);
-
+*/
 
 if(c == 1){
 	time_taken = (end-start);
@@ -129,6 +132,7 @@ if(c == 1){
     }
 	printf("\n\t%15.6f, %15.6f,%15.6f, %15.6f,\t%d \t%d, \t  %d",time_taken, time_takenSt, time_takedy, time_takengu, chunk,  N, c);
      }
+  }
 
 printf("\n");
 free(A);

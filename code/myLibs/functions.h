@@ -115,6 +115,45 @@ for (int i = 0; i < N; i++)
   }
 }
 
+
+void matrix_multi_checker(int **a, int **b, int **c, int rowA, int columnB, int columnA){
+int i,j,p;
+int sum = 0;
+
+for(i=0; i<rowA; i++){
+  for (j=0; j<columnB; j++) {
+      for(p=0; p<columnA; p++){
+      sum += a[i][p] * b[p][j];
+}
+    if(c[i][j] !=  sum){
+      printf("\nWrong at %d,%d,%d\n", i, j, sum );
+    }
+     sum = 0;
+    }
+  }
+}
+
+void matrix_multi_serial(int **a, int **b, int **c, int rowA, int columnB, int columnA){
+int i,j,p;
+
+for(i=0; i<rowA; i++){
+  for (j=0; j<columnB; j++) {
+     c[i][j] = 0;
+    for(p=0; p<columnA; p++){
+      c[i][j] += a[i][p] * b[p][j];
+  }
+    }
+  }
+}
+
+void zero_matrix(int **c, int rowA, int columnB){
+  int i, j, p;
+  for(i=0; i<rowA; i++){
+    for (j=0; j<columnB; j++) 
+      c[i][j] = 0;
+  }
+}
+
 /*
 float determinant(int N, float A[N][N]){
       

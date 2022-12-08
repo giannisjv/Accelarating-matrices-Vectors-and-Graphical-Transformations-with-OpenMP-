@@ -3,109 +3,83 @@
 #include <time.h>
 #include <omp.h>
 
-//my myLibs
-//Random Generator
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/ragnlib.h"
-#include "/home/giannisvidras/Dropbox/Πτυχιακή/myLibs/colib.h"
+#include "../../myLibs/functions.h"
+#include "../../myLibs/colib.h"
 
-
-
-
-//#include "/home/giannis/Dropbox/Πτυχιακή/color.h"
-#define c 12
+#define cores 8
+#define min 1
+#define max 1000
 int main(int argc, char const *argv[]) {
 
-
-
   srand(time(NULL));
-  time_t startSe, StopSe;
-  double time_sequ;
-  double start = 0.0 , end = 0.0;
-  double time_taken = 0.0;
 
+    time_t start,  end; 
+    double time_taken = 0.0;	                        // Start and end time
 
-
+    double staticSt = 0.0, staticEn = 0.0;
+    double time_takenSt = 0.0;
+                              // variable to mesure the time algorith took to run 
+    double dynamicSt = 0.0, dynamicEn = 0.0;
+    double time_takedy = 0.0;
+    
+    double guidedSt = 0.0, guidedEn = 0.0;
+    double time_takengu = 0.0;	
+    					
+	
+  
+  
+  int chunk, c;            // A variety of variables!
   int i, j, p, l, sum = 0, counter = 0;
   int NA, MA, NB, MB;
   int **A, **B, **C;
   int RowsA, ColumnsA;
   int RowsB, ColumnsB;
 
-
-/*while (NA != 10000)
-{
-
-  printf("\n\n");
-
-NA = NA + 100;
-
-
-  */ // Inserting the first Matrix
-  printf("\n Insert First Matrix's Number of Rows: \n");
+/*
+  printf("\n Insert First Matrix's Number of Rows: \n");   // Inserting the first Matrix
   scanf("%d",&NA);
 
-  printf("\n Insert First Matrix's Number of Columns from A \n and Rows from B: \n");
+  printf("\n Insert First Matrix's Number of Columns from A \n and Rows from B: \n"); // Inserting the second Matrix
 
   scanf("%d",&MA);
-// Inserting the second Matrix
-  NB = MA;
 
   printf("\nInsert Second Matrix's Number of Columns: \n");
 
   scanf("%d",&MB);
 
+  */
+ NA = NB = MA = MB =10000;
 
-/* checking if both Matrices Rows from A are equal to Columns from B
-and if Rows from B are equal to Columns from A*/
-
-/* checking finished */
-/*
-MA = NA;
-NB = NA;
-MB = NA;
-
-
-if (MA != NB){
-  printf("\nM from A and N from B are not equal\n");
-  return -1;
-}
-*/
-
-  RowsA =    NA * sizeof(int *);
+  RowsA =  NA * sizeof(int *);
   ColumnsA = MA * sizeof(int);
 
-  RowsB =    NB * sizeof(int *);
+  RowsB =  NB * sizeof(int *);
   ColumnsB = MB * sizeof(int);
-  //printf("Here i am Before malloc\n" );
 
   A = (int **)malloc(RowsA);
       for(i=0;i<NA;i++){
       A[i] = (int *)malloc(ColumnsA);
     }
-
-
-    if(!A){
+  if(!A){
       printf("The Matrix is too big\nExiting\n");
       return -1;
     }
 
-    B = (int **)malloc(RowsB);
+  B = (int **)malloc(RowsB);
       for(i=0; i<NB; i++){
         B[i] = (int *)malloc(ColumnsB);
       }
-
-if(!B){
+  if(!B){
         printf("The Matrix is too big\nFreeing A and Exiting\n");
         free(A);
         return -1;
       }
 
-        C = (int **)malloc(RowsA);
-          for(i=0;i<NA;i++){
-            C[i] = (int *)malloc(ColumnsB);
+  C = (int **)malloc(RowsA);
+      for(i=0;i<NA;i++){
+        C[i] = (int *)malloc(ColumnsB);
           }
-
-if(!C){
+  if(!C){
         printf("The Matrix is too big\nFreeing A and B\nExiting\n");
         free(A);
         free(B);
@@ -114,134 +88,99 @@ if(!C){
 
 
           for(i=0; i<NA; i++){
-            for (j=0; j<MA; j++) {
-            A[i][j] = randomGen();
-
-            }
+            for (j=0; j<MA; j++) 
+            A[i][j] = randomGenInteger(min, max);
+            B[i][j] = randomGenInteger(min, max);
           }
 
+  printf("\n\t\tSerial\t\tStatic\t\tdynamic\t\tguided  \tchunk\t N\tCores");
 
-          for(i=0; i<NB; i++){
-            for (j=0; j<MB; j++) {
-              B[i][j] = randomGen();
-
-            }
-          }
-
+  //for ( chunk = 1; chunk <= 4096; chunk *= 2) {
+    printf("\n");
+    for(c = 2; c <= cores; c *= 2){
+    /*if(c == 1){
+        start = clock();
+      matrix_multi_serial(A, B, C, NA, MA, MA);
+        end = clock();
+  } else{*/
+      #pragma omp parallel num_threads(c)
+     {
+       staticSt = omp_get_wtime();
+      #pragma omp  for schedule(static) private(i, j, p, sum)
           for(i=0; i<NA; i++){
-            for (j=0; j<MB; j++) {
-              C[i][j] = 0;
-
-            }
-          }
-
-          for(l=1; l<c; l*=2){
-
-            for(i=0; i<NA; i++){
-            for (j=0; j<MB; j++) {
-              C[i][j] = 0;
-              }
-            }
-
-      start = omp_get_wtime();
-      #pragma omp parallel for collapse(2) schedule(static) num_threads(l) private(i, j, p, sum) shared(A, B, C, NA, MB, MA)
-          for(i=0; i<NA; i++){
-            for (j=0; j<MB; j++) {
+            for (j=0; j<MA; j++){
+              sum = 0;
               for(p=0; p<MA; p++){
+                 sum += A[i][p] * B[p][j];
+              }
+                 C[i][j] = sum;
+                 sum = 0;
+          }
+        }
+       staticEn = omp_get_wtime();
+        //matrix_multi_checker(A, B, C, NA, MA, MA);
+       dynamicSt = omp_get_wtime();
+
+	  #pragma omp  for schedule(dynamic) private(i, j, p, sum)
+			  for(i=0; i<NA; i++){
+            for (j=0; j<MB; j++) {
+              sum = 0;
+              for(p=0; p<MA; p++)
 
                 sum += A[i][p] * B[p][j];
 
-
-            //  printf("\n\ni = (%d) j= (%d) p = (%d) C = (%d)",i,j,p,C[i][j] );
-          }
-
-          #pragma omp nowait
           C[i][j] = sum;
           sum = 0;
-
+        }
+      }
+      dynamicEn = omp_get_wtime();
+      //matrix_multi_checker(A, B, C, NA, MA, MA);
+      guidedSt = omp_get_wtime();
+    #pragma omp  for schedule(guided) private(i, j, p, sum)
+        for(i=0; i<NA; i++){
+            for (j=0; j<MB; j++) {
+              sum = 0;
+              for(p=0; p<MA; p++)
+              sum += A[i][p] * B[p][j];
+          C[i][j] = sum;
+          sum = 0;
           }
         }
+      guidedEn = omp_get_wtime();
 
-end = omp_get_wtime();
-time_taken = (end - start);
-
-printf("Number of CPUs used:"YEL" (%d)"RESET" Time tooked "RED"(%5.6f)"RESET"N: "CYN"(%d) \n"RESET,l,time_taken,NA);
-          }
-
-
-            for(i=0; i<NA; i++){
-            for (j=0; j<MB; j++) {
-              C[i][j] = 0;
-            }
-          }
-
-
-  //time_taken /= CLOCKS_PER_SEC;
+      }
+    //}
+    
+   //matrix_multi_checker(A, B, C, NA, MA, MA);
+/*if(c == 1){
+	time_taken = (end-start);
+	time_taken /= CLOCKS_PER_SEC;
+    time_takenSt = time_takedy = time_takengu = 0.0;
+    } else{
+    time_taken = 0.0;*/
+    time_takenSt = (staticEn - staticSt);
+    time_takedy = (dynamicEn - dynamicSt);
+    time_takengu = (guidedEn - guidedSt);
+    //}
+	printf("\n\t%15.6f, %15.6f,%15.6f, %15.6f,\t%d \t%d, \t  %d",time_taken, time_takenSt, time_takedy, time_takengu, chunk,  NA * MB, c);
 
       /*    -------------------------------------
              | print statements for the Matrices |
              -------------------------------------
-
-            printf("\n\nMatrix A\n");
-             for(i=0; i<NA; i++){
-               printf("\n");
-               for (j=0; j<MA; j++) {
-                 printf("(%d)\t", A[i][j]);
-                              }
-             }
-
-             printf("\n\nMatrix B\n");
-             for(i=0; i<NB; i++){
-               printf("\n");
-               for (j=0; j<MB; j++) {
-                 printf("(%d)\t", B[i][j]);
-                              }
-             }
-
-             printf("\n\nMatrix C\n");
-             for(i=0; i<NA; i++){
-               printf("\n");
-               for (j=0; j<MB; j++) {
-                 printf("(%d)\t", C[i][j]);
-                              }
-}
 */
-//  printf("\n");
-
-startSe = clock();
-for(i=0; i<NA; i++){
-  for (j=0; j<MB; j++) {
-    for(p=0; p<MA; p++){
-
-      sum += A[i][p] * B[p][j];
-  //  printf("\n\ni = (%d) j= (%d) p = (%d) C = (%d)",i,j,p,C[i][j] );
-}
-
-
-    if(C[i][j] !=  sum){
-      counter++;
-    }
-     sum = 0;
-    //  printf("Wrong at %d,%d,%d\n",i,j,sum );
-
-
-    }
-
-
-
-}
-
-StopSe = clock();
-
-time_sequ = StopSe - startSe;
-time_sequ /= CLOCKS_PER_SEC;
-
-
-//printf("\nTime took Sequencialy: "RED"(%5.6f)\n"RESET, time_sequ);
-printf("\nTime took to run the program: "RED"(%5.6f)"RESET" Time took sequencialy finding pobable errors "GRN"(%5.6f)"RESET" Wrong was: "BLU"%d\n"RESET,time_taken,time_sequ, counter );
+/*
+            printf("\n\nMatrix A\n");
+            display_2D_Non_Squered(A, NA, MA);
+            printf("\nMatrix B\n");
+            display_2D_Non_Squered(B, NB, MB); 
+            printf("\n\nMatrix C\n");
+            display_2D_Non_Squered(C, NA, MB);
+             matrix_multi_checker(A, B, C, NA, MA, MA);
+             */
+    }    
              free(A);
              free(B);
              free(C);
-//}
+printf("\n");
   return 0;
 }
