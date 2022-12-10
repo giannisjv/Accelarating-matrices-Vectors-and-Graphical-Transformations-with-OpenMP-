@@ -59,8 +59,7 @@ for(i=0; i<N;i++){
 			   }
 		  }
 	 }
-  }
- 
+}
 
 
 // Printing The upper triangular Matrix just to be sure no error occured

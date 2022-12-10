@@ -25,44 +25,6 @@ int randomGenInteger(int min, int max){
 }
 
 
-
-float determinant2x2(float A[2][2], int a, int b){
-
-float det;
-
-  int sum = a + 1 + b + 1;
-  if (sum % 2 == 0){
-    det = (A[0][0] * A[1][1]) - (A[0][1] * A[1][0]);
-  }
-  else{
-    det = -(A[0][0] * A[1][1]) - (A[0][1] * A[1][0]);
-  }
-
-  return det;
-};
-
-
-//determinant for 3x3
-float determinant3x3(float B[3][3]){
-   float determinant = B[0][0] * ((B[1][1] * B[2][2]) - (B[2][1] * B[1][2])) - B[0][1] * (B[1][0] * B[2][2] - B[2][0] * B[1][2]) + B[0][2] * (B[1][0] * B[2][1] - B[2][0] * B[1][1]);
-
- return determinant;
-};
-
-
-float inverse3x3(float A[3][3], int det){
-
-  int i,j;
-
-  for(i=0; i<3; i++){
-    for (j = 0; j < 3; j++) {
-      A[i][j] /= det;
-    }
-  }
-  return A[i][j];
-}
-
-
 void display2d(int N, float A[N][N]){
   for (int i = 0; i < N; i++)
   {
@@ -113,7 +75,7 @@ void display_2D_Non_Squeredfloat(float **a, int row, int column){
       printf("\n");
       for (int j = 0; j < column; j++)
       {
-      printf("%.2f\t",a[i][j]);
+      printf("%5.10f\t",a[i][j]);
     }
   }
 }
@@ -179,10 +141,26 @@ void zero_matrix(int **c, int rowA, int columnB){
   }
 }
 
-float determinant_tri(int N, float A[N][N]){
+float determinant_tri(float **A, int N){
       float det = 1.0; //storage for determinant
     for(int i = 0; i < N; i++){
         det *= A[i][i]; // finding determinant by multiply trigonal matrix's main diagonal
     }
  return det; 
+}
+
+void UpperTriangle(float **A, int N){
+      int i, j, k; 
+      float ratio;
+      
+    for (i = 0; i < N; i++) {
+      ratio = 0.0;
+		  for(j = i + 1; j < N; j++) {
+			  ratio = A[j][i] / A[i][i];
+         //printf("i = (%2d), j = (%2d), ratio = (%2.2f)\n",i, j, ratio );
+          for(k=0; k<N; k++) {
+			  		A[j][k] -= ratio * A[i][k];
+			   }
+		  }
+	 }
 }

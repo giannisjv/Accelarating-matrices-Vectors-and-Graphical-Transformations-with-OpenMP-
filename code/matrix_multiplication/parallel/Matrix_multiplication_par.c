@@ -106,7 +106,7 @@ long int  counter = 0;
       #pragma omp parallel num_threads(c)
      {
        staticSt = omp_get_wtime();
-      #pragma omp  for schedule(static) private(i, j, p, sum) reduction(+ : counter)
+      #pragma omp for schedule(static) private(i, j, p, sum) reduction(+ : counter)
           for(i=0; i<NA; i++){
             for (j=0; j<MA; j++){
               sum = 0;

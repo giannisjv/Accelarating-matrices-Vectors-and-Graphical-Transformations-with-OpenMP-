@@ -5,9 +5,11 @@
 #include<stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <omp.h>
 
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
+
 
 #define min 1
 #define max 1000
@@ -16,7 +18,7 @@ int main(){
 
     float ratio, det, det_temp, temp_num;
     int i, j, k, p;
-    int c;
+    int c, y, x;
 
     int N = 500, M;    
     float **A, **Ad, **inverseA, **matrix;       // main matrices A, 
@@ -78,6 +80,8 @@ int main(){
 
 det = determinant_tri(matrix, N);      // finding the deteminat by multiplying the main diagonal 
 
+#pragma omp parallel num_threads(2) 
+    {
       for (p = 0; p < N; p++) { 
         for (k = 0; k < N; k++) {
             
@@ -98,9 +102,8 @@ det = determinant_tri(matrix, N);      // finding the deteminat by multiplying t
     }
 }
 
-
-int x = 0;
-int y = -1;
+    x = 0;
+    y = -1;
     for (i = 0; i < N; i++) {
       for (j = 0; j < N; j++) {
 
@@ -122,7 +125,6 @@ int y = -1;
 			   printf("\n\nOne element of the main diagonal is 0 (zero!) You can't procced!\n\n");
          printf("The element is x=(%d), y=(%d), value=(%f)\n",i,j,matrix1[i][j] );
 			   return -1;
-
     }
   }
     UpperTriangle(matrix1, M);
