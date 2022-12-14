@@ -16,9 +16,9 @@ int main(){
 
     float ratio, det, det_temp, temp_num;
     int i, j, k, p;
-    int c;
+    int c, times;
 
-    int N = 500, M;    
+    int N = 100, M;    
     float **A, **Ad, **inverseA, **matrix;       // main matrices A, 
     float **matrix1, **temp;           // helpers
    
@@ -64,7 +64,8 @@ int main(){
       matrix[i][j] = A[i][j];
      }
   }
-
+for (times = 0; times <14; times++){
+//display_2D_Non_Squeredfloat(A, N, N);
   start = clock();
 
          for ( i = 0; i < N; i++) { 
@@ -88,7 +89,7 @@ det = determinant_tri(matrix, N);      // finding the deteminat by multiplying t
                     temp[i][j] = 0.0;
                     }
                     else {
-                        if((p + k) % 2 == 0){
+                        if((i + j) % 2 == 0){
                         temp[i][j] = A[i][j];
                     }   else{
                         temp_num = A[i][j];
@@ -148,11 +149,14 @@ For every element of the First matrix we will divide by the determinant
             inverseA[i][j] = Ad[i][j] / det;
       }
     }
+
+    //display_2D_Non_Squeredfloat(inverseA, N, N);
     end = clock();
     time_taken = end - start;
     time_taken /= CLOCKS_PER_SEC;
     printf("\ntime took %5.6f", time_taken);
-
+    time_taken = start = end = 0;
+}
 printf("\n");
     return 0;
 }

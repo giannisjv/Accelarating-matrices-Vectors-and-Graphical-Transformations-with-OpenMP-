@@ -13,21 +13,23 @@
 
 #define min 1
 #define max 1000
+#define cores 8
 
 int main(){
 
     float ratio, det, det_temp, temp_num;
     int i, j, k, p;
-    int c, y, x;
+    int c, y = -1, x = 0;
+    int cor, chunk;
 
-    int N = 500, M;    
+    int N = 100, M;    
     float **A, **Ad, **inverseA, **matrix;       // main matrices A, 
     float **matrix1, **temp;           // helpers
    
     M = N - 1;
     srand(time(NULL));
-    time_t start, end ;
-    double time_taken;
+    double start = 0, end = 0 ;
+    double time_taken = 0;
 	
 
   	A = (float **)malloc(N * sizeof(float *)); 
@@ -67,7 +69,7 @@ int main(){
      }
   }
 
-  start = clock();
+  //display_2D_Non_Squeredfloat(A, N, N);
 
          for ( i = 0; i < N; i++) { 
             if (matrix[i][i] == 0.0) {
@@ -80,11 +82,18 @@ int main(){
 
 det = determinant_tri(matrix, N);      // finding the deteminat by multiplying the main diagonal 
 
-#pragma omp parallel num_threads(2) 
-    {
+for ( chunk = 1; chunk <= 4096; chunk *=2)
+{
+  printf("\n");
+  for ( cor = 2; cor <=cores; cor *= 2)
+  {
+    start = omp_get_wtime();
       for (p = 0; p < N; p++) { 
         for (k = 0; k < N; k++) {
+          #pragma omp parallel num_threads(cor)
+          {
             
+            #pragma omp for collapse(2) schedule(static, chunk)
             for (i = 0; i < N; i++) {
                 for (j = 0; j < N; j++) {
                     
@@ -92,7 +101,7 @@ det = determinant_tri(matrix, N);      // finding the deteminat by multiplying t
                     temp[i][j] = 0.0;
                     }
                     else {
-                        if((p + k) % 2 == 0){
+                        if((i + j) % 2 == 0){
                         temp[i][j] = A[i][j];
                     }   else{
                         temp_num = A[i][j];
@@ -104,31 +113,31 @@ det = determinant_tri(matrix, N);      // finding the deteminat by multiplying t
 
     x = 0;
     y = -1;
+   #pragma omp master
+   {
     for (i = 0; i < N; i++) {
       for (j = 0; j < N; j++) {
-
         if (temp[i][j] != 0 && (i != p || j != k)){
           y++;
             if(y == M){
                 x++;
-                y=0;
+                y = 0;
                 }
             matrix1[x][y] = temp[i][j];
-
-
       }
     }
   }
 
+/*
     for (i = 0; i < M; i++) {
         if (matrix1[i][i] == 0.0) {
 			   printf("\n\nOne element of the main diagonal is 0 (zero!) You can't procced!\n\n");
-         printf("The element is x=(%d), y=(%d), value=(%f)\n",i,j,matrix1[i][j] );
-			   return -1;
+         printf("The element is x=(%d), y=(%d), value=(%f)\n",i,i,matrix1[i][i]);
+			   
     }
   }
+*/
     UpperTriangle(matrix1, M);
-
  /*for matrix equals to 1 we multiply the main diagonal.
    If any element of the main diagonal is zero
     we will have 0 as determinant and the inversion will not be available.*/
@@ -136,24 +145,34 @@ det = determinant_tri(matrix, N);      // finding the deteminat by multiplying t
     det_temp = 1; //storage for determinant
     for(i = 0; i < M; i++){
         det_temp *= matrix1[i][i];
+    } 
+    Ad[k][p] = det_temp;  
     }
-
-Ad[k][p] = det_temp;    
+   }
   }
-}
+} 
 /*
 For every element of the First matrix we will divide by the determinant
   by that we will have the inverse matrix */
-
+ 
+ #pragma omp parallel for collapse(2) num_threads(cor) schedule(guided, 8)
     for(i=0; i<N; i++){
-      for (j = 0; j < N; j++) {
+      for (j=0; j<N; j++)
             inverseA[i][j] = Ad[i][j] / det;
       }
-    }
-    end = clock();
+    end = omp_get_wtime();
     time_taken = end - start;
-    time_taken /= CLOCKS_PER_SEC;
-    printf("\ntime took %5.6f", time_taken);
+    printf("\ntime took %5.6f\t chunk %d\t cores %d \t N %d", time_taken, chunk, cor, N);
+    end = start = time_taken = 0;
+  }
+}
+    //display_2D_Non_Squeredfloat(inverseA, N, N);
+    free(A);
+    free(inverseA);
+    free(Ad);
+    free(matrix);
+    free(matrix1);
+    free(temp);
 
 printf("\n");
     return 0;
