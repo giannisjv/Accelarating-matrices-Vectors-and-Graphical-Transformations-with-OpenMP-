@@ -90,10 +90,6 @@ for ( chunk = 1; chunk <= 4096; chunk *=2)
     start = omp_get_wtime();
       for (p = 0; p < N; p++) { 
         for (k = 0; k < N; k++) {
-          #pragma omp parallel num_threads(cor)
-          {
-            
-            #pragma omp for collapse(2) schedule(static, chunk)
             for (i = 0; i < N; i++) {
                 for (j = 0; j < N; j++) {
                     
@@ -113,8 +109,6 @@ for ( chunk = 1; chunk <= 4096; chunk *=2)
 
     x = 0;
     y = -1;
-   #pragma omp master
-   {
     for (i = 0; i < N; i++) {
       for (j = 0; j < N; j++) {
         if (temp[i][j] != 0 && (i != p || j != k)){
@@ -147,7 +141,6 @@ for ( chunk = 1; chunk <= 4096; chunk *=2)
         det_temp *= matrix1[i][i];
     } 
     Ad[k][p] = det_temp;  
-    }
    }
   }
 } 
@@ -155,7 +148,7 @@ for ( chunk = 1; chunk <= 4096; chunk *=2)
 For every element of the First matrix we will divide by the determinant
   by that we will have the inverse matrix */
  
- #pragma omp parallel for collapse(2) num_threads(cor) schedule(guided, 8)
+ #pragma omp parallel for collapse(2) num_threads(cor) schedule(guided, chunk)
     for(i=0; i<N; i++){
       for (j=0; j<N; j++)
             inverseA[i][j] = Ad[i][j] / det;
