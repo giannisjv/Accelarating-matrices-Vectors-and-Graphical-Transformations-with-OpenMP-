@@ -37,12 +37,31 @@ void display2d(int N, float A[N][N]){
   printf("\n");
 }
 
+void display2dint(int N, int A[N][N]){
+  for (int i = 0; i < N; i++)
+  {
+    printf("\n");
+    for (int j = 0; j < N; j++)
+    {
+      printf("%d\t",A[i][j]);
+    }
+  }
+  printf("\n");
+}
 
 void display(int *a, int size){
 
     for (int i = 0; i <size; i++)
     {
       printf("%d\n",a[i]);
+    }
+    
+}
+void display1d(int size, float a[size]){
+printf("\n");
+    for (int i = 0; i <size; i++)
+    {
+      printf("%5.6f\n",a[i]);
     }
     
 }
@@ -157,10 +176,34 @@ void UpperTriangle(float **A, int N){
       ratio = 0.0;
 		  for(j = i + 1; j < N; j++) {
 			  ratio = A[j][i] / A[i][i];
-         //printf("i = (%2d), j = (%2d), ratio = (%2.2f)\n",i, j, ratio );
           for(k=0; k<N; k++) {
 			  		A[j][k] -= ratio * A[i][k];
 			   }
+		  }
+	 }
+}
+
+float determinant_tri_non_malloc(int N, float A[N][N]){
+      float det = 1.0; //storage for determinant
+    for(int i = 0; i < N; i++){
+        det *= A[i][i]; // finding determinant by multiply trigonal matrix's main diagonal
+    }
+ return det; 
+}
+
+
+void UpperTriangleNonMalloc(int N, float A[N][N]){
+      int i, j, k; 
+      float ratio;
+      
+    for (i = 0; i < N; i++) {
+      ratio = 0.0;
+		  for(j = i + 1; j < N; j++) {
+			  ratio = A[j][i] / A[i][i];
+          for(k=0; k<N; k++) {
+			  		A[j][k] -= ratio * A[i][k];
+         }
+         
 		  }
 	 }
 }

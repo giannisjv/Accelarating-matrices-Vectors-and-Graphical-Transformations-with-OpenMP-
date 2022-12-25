@@ -1,0 +1,29 @@
+
+Serial Program
+
+
+Time took 103.434456
+
+Time took 103.527676
+
+Time took 104.362818
+
+Time took 104.244267
+
+Time took 104.237782
+
+Time took 104.027852
+
+Time took 103.444096
+
+Time took 103.825778
+
+Time took 103.431662
+
+Time took 103.006464
+
+Time took 102.535901
+
+Time took 102.497284
+
+Time took 103.724669
