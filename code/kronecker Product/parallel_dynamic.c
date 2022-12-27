@@ -6,7 +6,7 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define N 200
+#define N 150
 #define M 150
 #define cores 8
 
@@ -16,21 +16,11 @@ int main(int argc, char const *argv[])
     int **A, **B, **C; //
     int i, j, s, f, c;
     int ARow, ACol, BRow, BCol ,CRow, CCol, stRow, stCol;
-    int NN = N * N;
-    time_t SeqStart, SeqEnd;
+    int chunk;
     
     double CPU_time = 0.0;
     double Start = 0.0, Stop =0.0;
     srand(time(NULL));
-    
-    // Making the Matrices Dynamicly by the user...
-/*
-        ARow = randomGenInteger(1, 3);
-        ACol = randomGenInteger(1, 3);
-
-        BRow = randomGenInteger(1, 3);
-        BCol = randomGenInteger(1, 3);
-*/
 
         ARow = N;
         ACol = M;
@@ -89,38 +79,14 @@ int main(int argc, char const *argv[])
             for (i = 0; i < ARow; i++){
                 for (j = 0; j < ACol; j++){
                     A[i][j] = randomGenInteger(-10, 10);
+                    B[i][j] = randomGenInteger(-10, 10);
                 }
                 
             }
-            
-
-            for (i = 0; i < BRow; i++){
-                for (j = 0; j < BCol; j++){
-                    B[i][j] = randomGenInteger(-10, 10);
-            }
-                }
-
-                SeqStart = clock(); // starting the timer 
-                     for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
-                        for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
-                            stRow = i * BRow; // Matrix C ROW is "i" multiplied by the cardinality of Rows from the second Matrix 
-                            stCol = j * BCol; // Matrix C Column is "j" multiplied by the cardinality of Columns from the second Matrix
-                                for ( s = 0; s < BRow; s++){ // s from 0 to cardinality of ROWS from the second Matrix
-                                     for ( f = 0; f < BCol; f++){ // f from 0 to cardinality of Columns from the second Matrix
-                                        C[stRow+s][stCol+f] = (A[i][j]) * (B[s][f]);
-                                            // printf("\n\ni %d, j %d, s %d, f %d, Crow %d, Ccol %d",i, j, s, f, CRow+s, CCol+f);
-                     }
-                          }
-                                }
-                                    }
-            SeqEnd = clock(); 
-            CPU_time = SeqEnd - SeqStart;
-            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was (%5.6f) sequencialy\n\n",ARow, BRow, ACol, BCol, CPU_time/CLOCKS_PER_SEC);
-
-
-                for(c = 2; c <= cores; c*=2){
+            for (chunk = 1; chunk <= 4096; chunk *= 2){
+                for(c = 2; c <= cores; c *= 2){
                     Start = omp_get_wtime();
-                     #pragma omp parallel for collapse(2) schedule(dynamic, 2) num_threads(c) private(i, j, s, f)
+                    #pragma omp parallel for collapse(2) schedule(dynamic, chunk) num_threads(c) private(i, j, s, f)
                      for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
                         for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
                             stRow = i * BRow; // Matrix C ROW is "i" multiplied by the cardinality of Rows from the second Matrix 
@@ -128,7 +94,6 @@ int main(int argc, char const *argv[])
                                 for ( s = 0; s < BRow; s++){ // s from 0 to cardinality of ROWS from the second Matrix
                                      for ( f = 0; f < BCol; f++){ // f from 0 to cardinality of Columns from the second Matrix
                                         C[stRow+s][stCol+f] = (A[i][j]) * (B[s][f]);
-                                            // printf("\n\ni %d, j %d, s %d, f %d, Crow %d, Ccol %d",i, j, s, f, CRow+s, CCol+f);
                      }
                           }
                                 }
@@ -136,43 +101,26 @@ int main(int argc, char const *argv[])
                                     Stop = omp_get_wtime();
 
             CPU_time = Stop - Start;
-            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was (%5.6f) the cores used was (%d) \n\n",ARow, BRow, ACol, BCol, CPU_time, c);
+            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was "MAG"(%5.6f)"RESET" the cores used was "MAG"(%d)"RESET" the chunk is "GRN"(%d)"RESET,ARow, BRow, ACol, BCol, CPU_time, c, chunk);
                 }
+                printf("\n");
+            }
 /*
-//Display matrix A
-printf("\n\n");
-printf("Matrix A\n");
-        for (i = 0; i < ARow; i++){
-            printf("\n");
-            for (j = 0; j < ACol; j++){
-                    printf("%d\t",A[i][j]);
-         }
-            } 
-      
+        //Display matrix A
+            printf("\n\n");
+            printf("Matrix A\n");
+            display_2D_Non_Squered(A, ARow, ACol);
 
-//Display matrix B
-printf("\n\n");
-printf("Matrix B\n");
-        for (i = 0; i < BRow; i++){
-            printf("\n");
-            for (j = 0; j < BCol; j++){
-                    printf("%d\t",B[i][j]);
-         }
-            } 
+        //Display matrix B
+        printf("\n\n");
+        printf("Matrix B\n");
+            display_2D_Non_Squered(B, BRow, BCol);
 
-
-
-//Display matrix C
-printf("\n\n");
-printf("Matrix C\n");
-        for (i = 0; i < CRow; i++){
-            printf("\n"); 
-            for (j = 0; j < CCol; j++){
-                    printf("%d\t",C[i][j]);
-        }
-            } 
-
-
+        //Display matrix C
+        printf("\n\n");
+        printf("Matrix C\n");
+                display_2D_Non_Squered(C, CRow, CCol);
+        printf("\n");
 */
     free(A);
     free(B);

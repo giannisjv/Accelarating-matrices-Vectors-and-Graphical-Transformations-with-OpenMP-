@@ -1,40 +1,36 @@
-/* Kronecker product 
-
-*/
-
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <omp.h>
 
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
 #define N 150
 #define M 150
+#define cores 8
 
 int main(int argc, char const *argv[])
 {
-    
-    int **A, **B, **C; // Defining 3 matrices as pointers for use with malloc
-    int i, j, s, f;
-    int counter = 0;
+    // Defining 3 arrays as pointers for use with malloc
+    int **A, **B, **C; //
+    int i, j, s, f, c;
     int ARow, ACol, BRow, BCol ,CRow, CCol, stRow, stCol;
-    int NN = N * N;
-    time_t seqStart, Seq_End;
-    double CPU_time;
+    int chunk;
+    
+    double CPU_time = 0.0;
+    double Start = 0.0, Stop =0.0;
     srand(time(NULL));
 
-        ARow = N;   // Initialize A matrix
+        ARow = N;
         ACol = M;
 
-        BRow = M;   // Initialuze B matrix
+        BRow = M;
         BCol = N;
 
-        CRow = ARow * BRow; // initiate C Matrix 
-        CCol = ACol * BCol; // C matrix will have Rows A multiplied by Rows B same in Columns
+        // initiate CRow and CCol
+        CRow = ARow * BRow;
+        CCol = ACol * BCol;
 
 
 
@@ -83,11 +79,14 @@ int main(int argc, char const *argv[])
             for (i = 0; i < ARow; i++){
                 for (j = 0; j < ACol; j++){
                     A[i][j] = randomGenInteger(-10, 10);
-                     B[i][j] = randomGenInteger(-10, 10);
+                    B[i][j] = randomGenInteger(-10, 10);
                 }
-             }
-            
-                    seqStart = clock(); // starting the timer 
+                
+            }
+            for (chunk = 1; chunk <= 4096; chunk *= 2){
+                for(c = 2; c <= cores; c *= 2){
+                    Start = omp_get_wtime();
+                    #pragma omp parallel for collapse(2) schedule(static, chunk) num_threads(c) private(i, j, s, f)
                      for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
                         for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
                             stRow = i * BRow; // Matrix C ROW is "i" multiplied by the cardinality of Rows from the second Matrix 
@@ -95,33 +94,34 @@ int main(int argc, char const *argv[])
                                 for ( s = 0; s < BRow; s++){ // s from 0 to cardinality of ROWS from the second Matrix
                                      for ( f = 0; f < BCol; f++){ // f from 0 to cardinality of Columns from the second Matrix
                                         C[stRow+s][stCol+f] = (A[i][j]) * (B[s][f]);
-                                            counter++;
                      }
                           }
                                 }
                                     }
-            Seq_End = clock(); 
-            CPU_time = Seq_End - seqStart;
-            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was %5.6f\n\n",ARow, BRow, ACol, BCol, CPU_time/CLOCKS_PER_SEC);
-            printf("\nThe number of moves was (%d)\n", counter);
+                                    Stop = omp_get_wtime();
+
+            CPU_time = Stop - Start;
+            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was "MAG"(%5.6f)"RESET" the cores used was "MAG"(%d)"RESET" the chunk is "GRN"(%d)"RESET,ARow, BRow, ACol, BCol, CPU_time, c, chunk);
+                }
+                printf("\n");
+            }
 /*
-//Display matrix A
-    printf("\n\n");
-    printf("Matrix A\n");
-    display_2D_Non_Squered(A, ARow, ACol);
+        //Display matrix A
+            printf("\n\n");
+            printf("Matrix A\n");
+            display_2D_Non_Squered(A, ARow, ACol);
 
-//Display matrix B
-printf("\n\n");
-printf("Matrix B\n");
-     display_2D_Non_Squered(B, BRow, BCol);
+        //Display matrix B
+        printf("\n\n");
+        printf("Matrix B\n");
+            display_2D_Non_Squered(B, BRow, BCol);
 
-//Display matrix C
-printf("\n\n");
-printf("Matrix C\n");
-        display_2D_Non_Squered(C, CRow, CCol);
-printf("\n");
+        //Display matrix C
+        printf("\n\n");
+        printf("Matrix C\n");
+                display_2D_Non_Squered(C, CRow, CCol);
+        printf("\n");
 */
-
     free(A);
     free(B);
     free(C);
