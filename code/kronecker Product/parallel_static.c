@@ -128,3 +128,17 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+
+#pragma omp parallel for collapse(2) schedule(static, chunk) num_threads(c) private(i, j, s, f)
+    for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
+        for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
+            stRow = i * BRow; // Matrix C ROW is "i" multiplied by the cardinality of Rows from the second Matrix 
+            stCol = j * BCol; // Matrix C Column is "j" multiplied by the cardinality of Columns from the second Matrix
+                for ( s = 0; s < BRow; s++){ // s from 0 to cardinality of ROWS from the second Matrix
+                    for ( f = 0; f < BCol; f++){ // f from 0 to cardinality of Columns from the second Matrix
+                        C[stRow+s][stCol+f] = (A[i][j]) * (B[s][f]);
+            }   
+        }
+    }
+}
