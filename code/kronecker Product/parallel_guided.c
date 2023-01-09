@@ -6,8 +6,8 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define N 150
-#define M 150
+#define N 250
+#define M 250
 #define cores 8
 
 int main(int argc, char const *argv[])
@@ -83,10 +83,10 @@ int main(int argc, char const *argv[])
                 }
                 
             }
-            for (chunk = 1; chunk <= 4096; chunk *= 2){
+           // for (chunk = 1; chunk <= 4096; chunk *= 2){
                 for(c = 2; c <= cores; c *= 2){
                     Start = omp_get_wtime();
-                    #pragma omp parallel for collapse(2) schedule(guided, chunk) num_threads(c) private(i, j, s, f)
+                    #pragma omp parallel for collapse(2) schedule(guided) num_threads(c) private(i, j, s, f)
                      for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
                         for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
                             stRow = i * BRow; // Matrix C ROW is "i" multiplied by the cardinality of Rows from the second Matrix 
@@ -101,10 +101,10 @@ int main(int argc, char const *argv[])
                                     Stop = omp_get_wtime();
 
             CPU_time = Stop - Start;
-            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was "MAG"(%5.6f)"RESET" the cores used was "MAG"(%d)"RESET" the chunk is "GRN"(%d)"RESET,ARow, BRow, ACol, BCol, CPU_time, c, chunk);
+            printf("\n"MAG"%5.6f\t"RESET" "YEL"%d"RESET"\t"GRN"%d"RESET, CPU_time, c, chunk);
                 }
                 printf("\n");
-            }
+            //}
 /*
         //Display matrix A
             printf("\n\n");

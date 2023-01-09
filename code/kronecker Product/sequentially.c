@@ -12,15 +12,14 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define N 150
-#define M 150
+#define N 250   
+#define M 250
 
 int main(int argc, char const *argv[])
 {
     
     int **A, **B, **C; // Defining 3 matrices as pointers for use with malloc
-    int i, j, s, f;
-    int counter = 0;
+    int i, j, s, f, loop;
     int ARow, ACol, BRow, BCol ,CRow, CCol, stRow, stCol;
     int NN = N * N;
     time_t seqStart, Seq_End;
@@ -86,7 +85,9 @@ int main(int argc, char const *argv[])
                      B[i][j] = randomGenInteger(-10, 10);
                 }
              }
-            
+    printf("\nTime\n");
+            for (loop = 0; loop < 15; loop++)
+            {
                     seqStart = clock(); // starting the timer 
                      for(i = 0; i < ARow; i++){ // i from 0 to ROWS cardinality of the first Matrix
                         for (j = 0; j < ACol; j++){ // j from 0 to Columns cardinality of the first Matrix Col
@@ -95,15 +96,16 @@ int main(int argc, char const *argv[])
                                 for ( s = 0; s < BRow; s++){ // s from 0 to cardinality of ROWS from the second Matrix
                                      for ( f = 0; f < BCol; f++){ // f from 0 to cardinality of Columns from the second Matrix
                                         C[stRow+s][stCol+f] = (A[i][j]) * (B[s][f]);
-                                            counter++;
                      }
                           }
                                 }
                                     }
             Seq_End = clock(); 
             CPU_time = Seq_End - seqStart;
-            printf("\nTime needed for the matrix with (%d*%d) ROWS and (%d*%d) Columns was %5.6f\n\n",ARow, BRow, ACol, BCol, CPU_time/CLOCKS_PER_SEC);
-            printf("\nThe number of moves was (%d)\n", counter);
+            CPU_time /= CLOCKS_PER_SEC;
+            printf("\n%5.6f\n",CPU_time);
+            CPU_time = Seq_End = seqStart = 0;
+            }
 /*
 //Display matrix A
     printf("\n\n");
