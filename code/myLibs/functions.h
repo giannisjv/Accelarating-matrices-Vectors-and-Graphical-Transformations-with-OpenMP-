@@ -207,3 +207,30 @@ void UpperTriangleNonMalloc(int N, float A[N][N]){
 		  }
 	 }
 }
+
+int serial_search(int **A, int N, int searchNum){
+int counter = 0;
+for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            if(A[i][j] == searchNum){
+                counter++;
+            }
+        }
+    }
+    return counter;
+}
+
+
+int serial_search_parallel(int **A, int N, int searchNum, int cores){
+int counter = 0;
+#pragma omp parallel for collapse(2) schedule(static) num_threads(cores) reduction(+ : counter) 
+for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            if(A[i][j] == searchNum){
+                counter++;
+            }
+        }
+    }
+    return counter;
+}
+
