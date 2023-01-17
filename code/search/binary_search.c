@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]) {
     srand(time(NULL)); 
     double CPU_time;
     
-    int i, j, counter = 0, counter1 = 0, searchNum = 42;
+    int i, j, counter = 0, counter1 = 0, searchNum = 99;
     int times_found;
 
     bool found = false;
@@ -47,13 +47,18 @@ int main(int argc, char const *argv[]) {
     value = A[row][col];
 
     if (value == searchNum){
-      printf("\nFound\n");
+      printf("\nFound!\n");
+      found = true;
       return 1;
     }
     else if (value > searchNum){
       end = mid - 1;}
     else
       start = mid + 1;
+  }
+
+  if (found == false){
+    printf("\nDidn't found\n");
   }
 
     free(A);

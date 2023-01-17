@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <omp.h>
 
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
@@ -13,7 +14,7 @@ int main(int argc, char const *argv[]) {
     srand(time(NULL)); 
     double CPU_time;
     
-    int i, j, counter = 0, counter1 = 0, searchNum = 42;
+    int i, j, counter = 0, counter1 = 0, searchNum = 200;
     int times_found;
 
     bool found = false;
@@ -35,11 +36,12 @@ int main(int argc, char const *argv[]) {
             A[i][j] = counter++;
         }
     }
+
     display2D(A, N);
 
     printf("\n\n");
 
-    binary_search_par()
+    binary_search_par_workSharing(A, N, searchNum, 4);
 
     free(A);
         
