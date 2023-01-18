@@ -296,7 +296,7 @@ void binary_search_par_workSharing(int **A, int N, int searchNum, int num_thread
 #pragma omp section
             thread_three = binary_search_par(A, mid + 1, quarter_slice * 3, searchNum);
 #pragma omp section
-            thread_four = binary_search_par((A, quarter_slice * 3) + 1, end, searchNum);
+            thread_four = binary_search_par(A, ( quarter_slice * 3) + 1, end, searchNum);
     }
 
     end_time = omp_get_wtime();
