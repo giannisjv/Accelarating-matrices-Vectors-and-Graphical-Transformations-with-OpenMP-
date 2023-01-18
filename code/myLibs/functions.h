@@ -234,7 +234,6 @@ for(int i=0; i<N; i++){
     return counter;
 }
 
-int binary_search_par(int **A, int N, int start, int end, int searchNum){}
   
 
 
