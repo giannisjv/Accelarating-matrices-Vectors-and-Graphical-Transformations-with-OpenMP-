@@ -35,11 +35,12 @@ int main(int argc, char const *argv[]) {
             A[i][j] = counter++;
         }
     }
+
     display2D(A, N);
 
     printf("\n\n");
 
-    binary_search_par()
+    binary_search_par_workSharing(A, N, 4);
 
     free(A);
         
