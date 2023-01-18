@@ -6,8 +6,7 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define N 10
-
+#define N 5
 
 int main(int argc, char const *argv[]) {
     srand(time(NULL)); 
@@ -16,10 +15,11 @@ int main(int argc, char const *argv[]) {
     int i, j, counter = 0, counter1 = 0, searchNum = 99;
     int times_found;
 
-    bool found = false;
+    //bool found = false;
 
+     int found;
      int start = 0;
-     int mid, row, col, value;
+
      int end = N * N - 1;
     
     int **A;
@@ -39,6 +39,9 @@ int main(int argc, char const *argv[]) {
 
     printf("\n\n");
 
+  found = binary_search(A, start, end, N, searchNum);
+
+ /* 
   while (start <= end)
   {
     mid = start + (end - start) / 2;
@@ -59,6 +62,13 @@ int main(int argc, char const *argv[]) {
 
   if (found == false){
     printf("\nDidn't found\n");
+  }
+  */
+
+  if(found == 1){
+    printf("\nFound it\n");
+  }else{
+    printf("\nDoesn't exist\t# %d #\n",found);  
   }
 
     free(A);
