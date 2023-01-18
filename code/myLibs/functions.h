@@ -233,15 +233,22 @@ for(int i=0; i<N; i++){
     }
     return counter;
 }
+<<<<<<< HEAD
 
 int binary_search_par(int **A, int N, int start, int end, int searchNum){
   
   
+=======
+/*
+int binary_search_par(int **A, int start, int end, int searchNum){
+    
+  int mid, row, col, value;
+>>>>>>> afb7058dae99583c394bdcc2e8140e50109c4c8b
   while (start <= end)
   {
     mid = start + (end - start) / 2;
-    row = mid / N;
-    col = mid % N;
+    row = mid / end;
+    col = mid % end;
     value = A[row][col];
 
     if (value == searchNum){
@@ -249,11 +256,12 @@ int binary_search_par(int **A, int N, int start, int end, int searchNum){
       return 1;
     }
     else if (value > searchNum){
-      end = mid - 1;}
+      end = mid - 1;
+      }
     else
       start = mid + 1;
   }
-  return -1 
+  return -1;
 }
 
 void binary_search_par_workSharing(int **A, int N, int searchNum, int num_threads){
@@ -278,9 +286,12 @@ void binary_search_par_workSharing(int **A, int N, int searchNum, int num_thread
     {
 #pragma omp sections
         {
+<<<<<<< HEAD
         /* Function parameters:
             binarySearch_openmp(first_index, last_index, search_value);
         */
+=======
+>>>>>>> afb7058dae99583c394bdcc2e8140e50109c4c8b
 
 #pragma omp section
             thread_one = binary_search_par(A, 0, quarter_slice, searchNum);
@@ -289,13 +300,21 @@ void binary_search_par_workSharing(int **A, int N, int searchNum, int num_thread
 #pragma omp section
             thread_three = binary_search_par(A, mid + 1, quarter_slice * 3, searchNum);
 #pragma omp section
+<<<<<<< HEAD
             thread_four = binary_search_par((A, quarter_slice * 3) + 1, end, searchNum);
+=======
+            thread_four = binary_search_par(A, (quarter_slice * 3) + 1, end, searchNum);
+>>>>>>> afb7058dae99583c394bdcc2e8140e50109c4c8b
         }
     }
 
     end_time = omp_get_wtime();
     time_took = end_time - start_time;
+<<<<<<< HEAD
 
+=======
+    time_took /=CLOCKS_PER_SEC;
+>>>>>>> afb7058dae99583c394bdcc2e8140e50109c4c8b
     printf("Work took %f seconds\n", time_took);
 
     // Print results of serial Binary search
@@ -308,4 +327,9 @@ void binary_search_par_workSharing(int **A, int N, int searchNum, int num_thread
         printf("Element %d not found\n", searchNum);
     }
     printf("\n");
+<<<<<<< HEAD
 }
+=======
+}
+*/
+>>>>>>> afb7058dae99583c394bdcc2e8140e50109c4c8b
