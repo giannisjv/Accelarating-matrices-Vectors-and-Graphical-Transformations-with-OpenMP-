@@ -1,10 +1,9 @@
+/* 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
 
-// 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 //
+randomness function
 
-//randomness function
-
-//randomness function floating Point
-
+randomness function floating Point
+*/
 
 
 double randomGenFloat(double min, double max){
