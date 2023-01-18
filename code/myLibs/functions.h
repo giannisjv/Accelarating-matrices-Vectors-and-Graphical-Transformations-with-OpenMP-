@@ -234,7 +234,7 @@ for(int i=0; i<N; i++){
     return counter;
 }
 
-int binary_search_par(int **A, int N, int start, int end, int searchNum){
+int binary_search_par(int **A, int N, int start, int end, int searchNum){}
   
 
 
@@ -263,6 +263,7 @@ int binary_search_par(int **A, int start, int end, int searchNum){
 }
 
 void binary_search_par_workSharing(int **A, int N, int searchNum, int num_threads){
+    
     int result;
     int mid, row, col, value, start = 0, end = N - 1;
     double start_time, end_time, time_took;
