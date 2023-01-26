@@ -48,7 +48,7 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-printf("\nThe N was %d, translate row %d, translate Column %d\nThe scheduler is static \n", N, translationRow, translationColumn);
+printf("\nThe N was %d, translate row %d, translate Column %d\nThe scheduler is guided \n", N, translationRow, translationColumn);
 
 printf("\ntime took\tcores\tchunk\n");
 for (chunk = 1; chunk <= 4096; chunk *= 2)
@@ -56,7 +56,7 @@ for (chunk = 1; chunk <= 4096; chunk *= 2)
     for (c = 2; c <= cores; c*=2){
 
 start = omp_get_wtime();
-parallel_translate_static(A, B, N, translationRow, translationColumn, c, chunk);
+parallel_translate_guided(A, B, N, translationRow, translationColumn, c, chunk);
 end = omp_get_wtime();
 
 time_taken = end - start;
