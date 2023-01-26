@@ -258,5 +258,15 @@ int binary_search(int **A, int start, int end, int N, int searchNum){
   return -1;
 }
 
-
+void translate(int **A, int **B, int N, int translationRow, int translationColumn){
+     int i, j;
+     for ( i = 0; i < N + translationRow; i++){
+        for (j = 0; j < N +  translationColumn; j++){
+            if(i >= translationRow && j >= translationColumn){
+                B[i][j] = A[i - translationRow][j - translationColumn];
+            }else
+            B[i][j] = 0;
+    }
+  }
+}
 
