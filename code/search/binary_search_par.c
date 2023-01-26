@@ -10,7 +10,7 @@
 #define N 10
 
 void binary_search_par_workSharing(int **A, int searchNum, int num_threads);
-int binarySearch_openmp(int **A, int first, int last, int searchVal);
+int binarySearch_openmp(int **A, int first, int last, int NN, int searchVal);
 
 int main(int argc, char const *argv[]) {
     srand(time(NULL)); 
@@ -52,13 +52,15 @@ int main(int argc, char const *argv[]) {
 void binary_search_par_workSharing(int **A, int searchNum, int num_threads){
     
     int result;
-    int mid, row, col, value, start = 0, end = N * N - 1;
+    int midN, quarter_N, mid, row, col, value, start = 0, end = N * N - 1;
     double start_time, end_time, time_took;
 
     mid = start + (end - start) / 2;
+    midN = (N / 2) - 1;
+    quarter_N = midN / 2;
 
     int thread_one, thread_two, thread_three, thread_four;
-    int quarter_slice = mid / 2;
+    int quarter_slice = (mid / 2) + 1;
 
      printf("\n****** Now beginning Parallel work with OpenMP ******\n\n");
      printf("Starting binary search...\n");
@@ -75,13 +77,13 @@ void binary_search_par_workSharing(int **A, int searchNum, int num_threads){
 
 
 #pragma omp section
-            thread_one = binarySearch_openmp(A, 0, quarter_slice, searchNum);
+            thread_one = binarySearch_openmp(A, 0, quarter_slice, midN,  searchNum);
 #pragma omp section
-            thread_two = binarySearch_openmp(A, quarter_slice + 1, mid, searchNum);
+            thread_two = binarySearch_openmp(A, quarter_slice + 1, mid, midN,  searchNum);
 #pragma omp section
-            thread_three = binarySearch_openmp(A, mid + 1, quarter_slice * 3, searchNum);
+            thread_three = binarySearch_openmp(A, mid + 1, quarter_slice * 3, midN, searchNum);
 #pragma omp section
-            thread_four = binarySearch_openmp(A, ( quarter_slice * 3) + 1, end, searchNum);
+            thread_four = binarySearch_openmp(A, (quarter_slice * 3) + 1, end, midN, searchNum);
     }
 
     end_time = omp_get_wtime();
@@ -101,17 +103,16 @@ void binary_search_par_workSharing(int **A, int searchNum, int num_threads){
   }
 }
 
-int binarySearch_openmp(int **A, int start, int end, int searchNum){
+int binarySearch_openmp(int **A, int start, int end, int NN, int searchNum){
+    
     
   int mid, row, col, value;
-  int pl = end;
-  int end2 = (end * end) -1;
-
-  while (start <= end2)
+  
+  while (start <= end)
   {
-    mid = start + (end2 - start) / 2;
-    row = mid / pl;
-    col = mid % pl;
+    mid = start + (end - start) / 2;
+    row = mid / NN;
+    col = mid % NN;
     value = A[row][col];
 
     if (value == searchNum){
@@ -119,7 +120,7 @@ int binarySearch_openmp(int **A, int start, int end, int searchNum){
       return 1;
     }
     else if (value > searchNum){
-      end2 = mid - 1;
+      end = mid - 1;
       }
     else 
       start = mid + 1;

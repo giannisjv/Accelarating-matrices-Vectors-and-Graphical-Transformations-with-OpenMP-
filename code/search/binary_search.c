@@ -6,13 +6,13 @@
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define N 5
+#define N 10
 
 int main(int argc, char const *argv[]) {
     srand(time(NULL)); 
     double CPU_time;
     
-    int i, j, counter = 0, counter1 = 0, searchNum = 99;
+    int i, j, counter = 0, counter1 = 0, searchNum = 10;
     int times_found;
 
     //bool found = false;

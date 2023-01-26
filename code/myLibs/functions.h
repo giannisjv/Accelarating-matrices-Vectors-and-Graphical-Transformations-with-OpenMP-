@@ -236,12 +236,14 @@ for(int i=0; i<N; i++){
 int binary_search(int **A, int start, int end, int N, int searchNum){
     
   int mid, row, col, value;
+
   while (start <= end)
   {
     mid = start + (end - start) / 2;
     row = mid / N;
     col = mid % N;
     value = A[row][col];
+    printf("\nmid %d, row %d, col %d, value %d",mid, row, col, value);
 
     if (value == searchNum){
       printf("\nFound\n");
