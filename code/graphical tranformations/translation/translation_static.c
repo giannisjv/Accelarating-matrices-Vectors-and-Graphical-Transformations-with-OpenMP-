@@ -59,6 +59,7 @@ start = omp_get_wtime();
 parallel_translate_static(A, B, N, translationRow, translationColumn, c, chunk);
 end = omp_get_wtime();
 
+
 time_taken = end - start;
 
 printf("\n%5.6f\t%d\t%d", time_taken, c, chunk);
