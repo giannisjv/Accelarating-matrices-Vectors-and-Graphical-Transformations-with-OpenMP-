@@ -42,3 +42,41 @@ void parallel_translate_guided(int **A, int **B, int N, int translationRow, int 
   }
 }
 
+void parallel_rotation90_static(int **A, int **B, int N){
+  int i, j;
+  int x = N - 1;
+  #pragma omp parallel for collapse(2) schedule(static) num_threads(4)
+   for (i = 0; i < N; i++){
+        for (j = 0; j < N; j++){
+          B[j][x - i] = A[i][j];
+        }
+    }
+}
+
+/*
+
+void rotation180(int **A, int **B, int N){
+int i,j;
+int x = N - 1;
+int y = N - 1;
+   for (i = 0; i < N; i++){
+        for (j = 0; j < N; j++){
+            B[x][j] = A[i][j];
+        }
+        x--;
+    }
+}
+
+
+void rotation270(int **A, int **B, int N){
+  int i,j;
+  int x = N - 1;
+   for (i = 0; i < N; i++){
+        for (j = 0; j < N; j++){
+          B[x][i] = A[i][j];
+             x--;
+        }
+    x = N - 1;
+    }
+}
+*/
