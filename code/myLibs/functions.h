@@ -286,7 +286,7 @@ int i,j;
 int x = N - 1;
    for (i = 0; i < N; i++){
         for (j = 0; j < N; j++){
-            B[x][j] = A[i][j];
+            B[x - i][x - j] = A[i][j];
         }
     }
 }

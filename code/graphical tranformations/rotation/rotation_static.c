@@ -49,19 +49,6 @@ int main(int argc, char const *argv[])
     display2D(A, N);
     printf("\n\n");
     
-/*
-    rotation270(A, B, N);
-    printf("\nDisplay matrix B 270 degrees\n");
-    display2D(B, N);
-    
-    rotation180(A, B, N);
-    printf("\n\n");
-
-    printf("\nDisplay matrix B 180 degrees\n");
-    display2D(B, N);
-    printf("\n\n");
-    
-*/
     parallel_rotation90_static(A, B, N);
     printf("\n\n");
 
@@ -69,6 +56,19 @@ int main(int argc, char const *argv[])
     display2D(B, N);
     printf("\n\n");
     
+    parallel_rotation180_static(A, B, N);
+    printf("\n\n");
+
+    printf("\nDisplay matrix B 180 degrees\n");
+    display2D(B, N);
+    printf("\n\n");
+
+    parallel_rotation270_static(A, B, N);
+    printf("\n\n");
+
+    printf("\nDisplay matrix B 270 degrees\n");
+    display2D(B, N);
+    printf("\n\n");
     free(A);
     free(B);
     
