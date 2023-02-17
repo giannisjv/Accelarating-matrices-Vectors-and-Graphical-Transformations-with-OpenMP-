@@ -51,12 +51,12 @@ int main(int argc, char const *argv[])
 printf("\nThe N was %d, translate row %d, translate Column %d\nThe scheduler is guided \n", N, translationRow, translationColumn);
 
 printf("\ntime took\tcores\tchunk\n");
-for (chunk = 1; chunk <= 4096; chunk *= 2)
-{
+//for (chunk = 1; chunk <= 4096; chunk *= 2)
+//{
     for (c = 2; c <= cores; c*=2){
 
 start = omp_get_wtime();
-parallel_translate_guided(A, B, N, translationRow, translationColumn, c, chunk);
+parallel_translate_guided(A, B, N, translationRow, translationColumn, c);
 end = omp_get_wtime();
 
 time_taken = end - start;
@@ -66,7 +66,7 @@ printf("\n%5.6f\t%d\t%d", time_taken, c, chunk);
     time_taken = end = start = 0.0;
     }
     printf("\n\n");
-}
+//}
 
 free(A);
 free(B);

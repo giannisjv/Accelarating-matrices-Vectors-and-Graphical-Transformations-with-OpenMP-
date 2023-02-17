@@ -1,20 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <omp.h>
 
 #include "../../myLibs/colib.h"
 #include "../../myLibs/functions.h"
+#include "../../myLibs/parallelFunctions.h"
 
 #define min 1
 #define max 50
-#define N 10
+#define N 10000
+#define cores 8
 
 int main(int argc, char const *argv[])
 {
-    srand(time(NULL));
-    time_t start, end;
-    double time_took;
-    int i, j;
+    double start = 0, end = 0;
+    double time_taken = 0;
+    int i, j, c;
     int **A, **B;
     int counter = 1;
 
@@ -43,23 +45,19 @@ int main(int argc, char const *argv[])
             A[i][j] = counter++;
         }
     }
-    printf("\n");
 
-for(i=0;i<14;i++){
-    start = clock();
-    rotation180(A, B, N);
-    
-    end = clock();
-    time_took = end - start;
-    time_took /= CLOCKS_PER_SEC;
-    printf("%5.6f\n\n\n\n\n",time_took);
-    start = end = time_took = 0;
-}
-display2D(A, N);
-printf("\n\n");
-display2D(B, N);
-
-    free(A);
+for(int chunk = 1; chunk <=4096; chunk *= 2){
+    for(c = 2; c<=cores; c *= 2){
+        
+        start = omp_get_wtime();
+            parallel_rotation180_dynamic(A, B, N, c, chunk);
+        end = omp_get_wtime();
+        time_taken = end - start;
+        printf("\n%5.6f",time_taken);
+        start = end = time_taken =  0;
+            }
+    printf("\n\n");
+}  free(A);
     free(B);
     
     return 0;

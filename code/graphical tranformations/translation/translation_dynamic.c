@@ -51,6 +51,7 @@ int main(int argc, char const *argv[])
 printf("\nThe N was %d, translate row %d, translate Column %d\nThe scheduler is dynamic \n", N, translationRow, translationColumn);
 
 printf("\ntime took\tcores\tchunk\n");
+
 for (chunk = 1; chunk <= 4096; chunk *= 2)
 {
     for (c = 2; c <= cores; c*=2){

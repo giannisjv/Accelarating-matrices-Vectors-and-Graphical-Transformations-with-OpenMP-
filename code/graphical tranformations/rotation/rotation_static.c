@@ -9,13 +9,14 @@
 
 #define min 1
 #define max 50
-#define N 3
+#define N 10000
 #define cores 8
 
 int main(int argc, char const *argv[])
 {
-    srand(time(NULL));
-    int i, j;
+    double start = 0, end = 0;
+    double time_taken = 0;
+    int i, j, c;
     int **A, **B;
     int counter = 1;
 
@@ -45,30 +46,18 @@ int main(int argc, char const *argv[])
         }
     }
 
-    printf("\nDisplay matrix A\n");
-    display2D(A, N);
-    printf("\n\n");
-    
-    parallel_rotation90_static(A, B, N);
-    printf("\n\n");
-
-    printf("\nDisplay matrix B 90 degrees\n");
-    display2D(B, N);
-    printf("\n\n");
-    
-    parallel_rotation180_static(A, B, N);
-    printf("\n\n");
-
-    printf("\nDisplay matrix B 180 degrees\n");
-    display2D(B, N);
-    printf("\n\n");
-
-    parallel_rotation270_static(A, B, N);
-    printf("\n\n");
-
-    printf("\nDisplay matrix B 270 degrees\n");
-    display2D(B, N);
-    printf("\n\n");
+for(int chunk = 1; chunk <=4096; chunk *= 2){
+    for(c = 2; c<=cores; c *= 2){
+        
+        start = omp_get_wtime();
+            parallel_rotation180_static(A, B, N, c, chunk);
+        end = omp_get_wtime();
+        time_taken = end - start;
+        printf("\n%5.6f",time_taken);
+        start = end = time_taken =  0;
+            }
+            printf("\n\n");
+}
     free(A);
     free(B);
     
