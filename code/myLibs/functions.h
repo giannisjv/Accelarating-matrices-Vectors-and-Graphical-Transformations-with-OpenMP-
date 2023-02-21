@@ -270,6 +270,25 @@ void translate(int **A, int **B, int N, int translationRow, int translationColum
   }
 }
 
+
+void scaling_translate(int **A, int **B, int N, int axisx, int axisy, int scalingRow, int scalingColumn){
+     
+     int i, j;
+     for (i = 0; i < N * scalingRow + axisx; i++){
+        for (j = 0; j < N * scalingColumn + axisy; j++){
+           if(i < axisx || j < axisy){
+              B[i][j] = 0;
+              }
+              else{
+                B[i][j] = A[i - axisx][j - axisy];
+                } 
+
+   // B[i][j] = randomGenInteger(1, 50);
+    }
+  }
+}
+
+
 void rotation90(int **A, int **B, int N){
   int i,j;
   int x = N - 1;
