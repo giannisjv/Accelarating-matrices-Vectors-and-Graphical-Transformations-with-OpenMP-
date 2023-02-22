@@ -321,3 +321,37 @@ void rotation270(int **A, int **B, int N){
     }
 }
 
+// Scaling
+
+void scaling_filling(int **A, int N, int axisx, int axisy, int min, int max){
+    for (int i = 0; i < N + axisx; i++){ 
+      for (int j = 0; j < N + axisy; j++){
+        if(i < axisx  || j < axisy){
+          A[i][j] = 0;
+        }else{
+          A[i][j] = randomGenInteger(min, max);
+      }
+    }
+  }
+}
+
+void scaling_cleaning(int **A, int **temp, int N, int axisx, int axisy, int min, int max){
+for (int i = 0; i < N + axisx; i++){
+        for (int j = 0; j < N + axisy; j++){
+            if(A[i][j] != 0){
+                temp[i - axisx][j - axisy] = A[i][j];
+      }
+    }
+  }
+}
+
+void scaling(int **temp, int ** temp2, int N, int scalingRow, int scalingColumn){
+   for (int i = 0; i < N * scalingRow; i++){
+        for (int j = 0; j < N * scalingColumn; j++){
+            if(i < N && j < N){
+            temp2[i][j] = temp[i][j];
+            }else
+            temp2[i][j] = 1;
+        }
+    }
+}

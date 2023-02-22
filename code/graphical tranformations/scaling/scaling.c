@@ -8,10 +8,10 @@
 
 #define min 1
 #define max 50
-#define axisx 4
-#define axisy 4
-#define scalingRow  3
-#define scalingColumn  3
+#define axisx 50
+#define axisy 50
+#define scalingRow  50
+#define scalingColumn  50
 #define N 4
 
 int main(int argc, char const *argv[])
@@ -32,70 +32,57 @@ srand(time(NULL));
         printf("\nToo big Array!!!\n");
         return -1;
     }
-    
-    for (i = 0; i < N + axisx; i++){ //This is a for
-        for (j = 0; j < N + axisy; j++){
-        if(i < axisx  || j < axisy){
-            A[i][j] = 0;
-        }else{
-            A[i][j] = randomGenInteger(min, max);
-        }
-    }
-}
 
-   /* display_2D_Non_Squered(A, N + axisx, N + axisy);
-    printf("\n\n");
-*/
-
-
-      temp = (int **)malloc(N * sizeof(int *));   //Initiating matrix A with malloc 
+    temp = (int **)malloc(N * sizeof(int *));   //Initiating matrix A with malloc 
         for(i=0; i<N; i++)
             temp[i] = (int *)malloc(N * sizeof(int));
-
-        for (i = 0; i < N + axisx; i++){ //This is a for
-        for (j = 0; j < N + axisy; j++){
-        if(A[i][j] != 0){
-            temp[i - axisx][j - axisy] = A[i][j];
-        }
+     if(!temp){
+        printf("\nToo big Array!!!\n");
+        free(A);
+        return -1;
     }
-}
-
-    display2D(temp, N);
-    printf("\n\n");
 
 
-
-
-     temp2 = (int **)malloc((N * scalingRow) * sizeof(int *));   //Initiating matrix A with malloc 
+    temp2 = (int **)malloc((N * scalingRow) * sizeof(int *));   //Initiating matrix A with malloc 
         for(i=0; i<N * scalingRow; i++)
             temp2[i] = (int *)malloc((N * scalingColumn)  * sizeof(int));
 
-   
-
-      for (i = 0; i < N * scalingRow; i++){
-        for (j = 0; j < N * scalingColumn; j++){
-            if(i < N && j < N){
-            temp2[i][j] = temp[i][j];
-            }else
-            temp2[i][j] = 1;
-
-            //B[i][j] = randomGenInteger(min, max); 
-        }
+      if(!temp2){
+        printf("\nToo big Array!!!\n");
+        free(A);
+        free(temp);
+        return -1;
     }
 
-     display_2D_Non_Squered(temp2, N * scalingRow, N * scalingColumn);
-
-    
-     B = (int **)malloc((N * scalingRow + axisx) * sizeof(int *));   //Initiating matrix A with malloc 
+    B = (int **)malloc((N * scalingRow + axisx) * sizeof(int *));   //Initiating matrix A with malloc 
         for(i=0; i<N * scalingRow + axisx; i++)
             B[i] = (int *)malloc((N * scalingColumn + axisy)  * sizeof(int));
 
+      if(!B){
+        printf("\nToo big Array!!!\n");
+        free(A);
+        free(temp);
+        free(temp2);
+        return -1;
+    }
 
-    printf("\n\n");
+    start = clock();
+    // filing A matrix  
+    scaling_filling(A, N, axisx, axisy, min, max);
+
+    // taking only the values that matter from matrix A 
+    scaling_cleaning(A, temp, N, axisx, axisy, min, max);
+    
+    // scaling the matrix temp
+     scaling(temp, temp2, N, scalingRow, scalingColumn);
+
+
     scaling_translate(temp2, B, N, axisx, axisy, scalingRow, scalingColumn);
-
-    display_2D_Non_Squered(B, N * scalingRow + axisx, N * scalingColumn + axisy);
-
+    
+    end = clock();
+    time_taken = end - start;
+    time_taken /= CLOCKS_PER_SEC;
+    printf("\nTime needed %5.6f\n", time_taken);
    
      free(A);
      free(B);
