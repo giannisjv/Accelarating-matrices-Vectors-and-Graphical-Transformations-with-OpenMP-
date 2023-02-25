@@ -202,6 +202,31 @@ for (int i = 0; i < N + axisx; i++){
   }
 }
 
+void scaling_Static(int **temp, int ** temp2, int N, int scalingRow, int scalingColumn, int chunk){
+   #pragma omp for collapse(2) schedule(static, chunk)
+   for (int i = 0; i < N * scalingRow; i++){
+        for (int j = 0; j < N * scalingColumn; j++){
+            if(i < N && j < N){
+            temp2[i][j] = temp[i][j];
+            }else
+            temp2[i][j] = 1;
+        }
+    }
+}
+
+void scaling_translate_Static(int **A, int **B, int N, int axisx, int axisy, int scalingRow, int scalingColumn, int chunk){
+      #pragma omp for collapse(2) schedule(static, chunk)
+     for (int i = 0; i < N * scalingRow + axisx; i++){
+        for (int j = 0; j < N * scalingColumn + axisy; j++){
+           if(i < axisx || j < axisy){
+              B[i][j] = 0;
+              }
+              else{
+                B[i][j] = A[i - axisx][j - axisy];
+                } 
+    }
+  }
+}
 
 
 // Scaling Dynamic

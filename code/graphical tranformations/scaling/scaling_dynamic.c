@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <omp.h>
 
 #include "../../myLibs/functions.h"
 #include "../../myLibs/colib.h"
@@ -10,17 +11,17 @@
 #define max 50
 #define axisx 50
 #define axisy 50
-#define scalingRow  50
-#define scalingColumn  50
+#define scalingRow 50
+#define scalingColumn 50
 #define N 500
+#define cores 8
 
 int main(int argc, char const *argv[])
 {
 srand(time(NULL));
 
-    time_t start, end;
-    double time_taken;
-    int counter = 1;
+    double start = 0, end = 0;
+    double time_taken = 0;
     int i, j;
     int **A, **B, **temp, **temp2;
 
@@ -67,36 +68,52 @@ srand(time(NULL));
         return -1;
     }
 
-   while (counter != 4096)
-   {
-   
-    
-
-    start = clock();
+   //for (int chunk = 1; chunk <= 4096; chunk*=2){
+    for (int c = 2; c <= cores; c *=2)
+    {
+    #pragma omp parallel num_threads(c)
+    {
+    start = omp_get_wtime();
     // filing A matrix  
-    scaling_filling(A, N, axisx, axisy, min, max);
-
+    scaling_filling_dynamic(A, N, axisx, axisy, min, max);
+    /*
+    #pragma omp single
+    {
+    display_2D_Non_Squered(A, N + axisx, N + axisy);
+    }
+    */
+    
     // taking only the values that matter from matrix A 
-    scaling_cleaning(A, temp, N, axisx, axisy, min, max);
-    
+    scaling_cleaning_dynamic(A, temp, N, axisx, axisy);
+    /*
+    #pragma omp single
+    {
+    display_2D_Non_Squered(temp, N, N);
+    }
+    */
     // scaling the matrix temp
-     scaling(temp, temp2, N, scalingRow, scalingColumn);
-
-
-    scaling_translate(temp2, B, N, axisx, axisy, scalingRow, scalingColumn);
-    
-    end = clock();
+    scaling_dynamic(temp, temp2, N, scalingRow, scalingColumn);
+   /*
+    #pragma omp single
+    {
+    display_2D_Non_Squered(temp2, N * scalingRow, N * scalingColumn);
+    }
+    */
+    scaling_translate_dynamic(temp2, B, N, axisx, axisy, scalingRow, scalingColumn);
+   /* #pragma omp single
+    {
+    display_2D_Non_Squered(B, N * scalingRow + axisx, N * scalingColumn + axisy);
+    }*/
+}
+    end = omp_get_wtime();
     time_taken = end - start;
-    time_taken /= CLOCKS_PER_SEC;
-    printf("%5.6f\n\n\n\n\n", time_taken);
-    counter *=2;
+    printf("\n"MAG"%5.6f"RESET"\t"RED"%d"RESET, time_taken , c);
     time_taken = start = end = 0;
-   } 
-   
+   }
+   printf("\n\n"); 
      free(A);
      free(B);
      free(temp);
      free(temp2);
-     printf("\n\n");
     return 0;
 }
