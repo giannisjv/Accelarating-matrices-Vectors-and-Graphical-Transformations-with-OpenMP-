@@ -210,49 +210,33 @@ void UpperTriangleNonMalloc(int N, float A[N][N]){
 	 }
 }
 
-int serial_search(int **A, int N, int searchNum){
+int serial_search(int *A, int N, int searchNum){
 int counter = 0;
 for(int i=0; i<N; i++){
-        for(int j=0; j<N; j++){
-            if(A[i][j] == searchNum){
+            if(A[i] == searchNum){
                 counter++;
-            }
         }
     }
     return counter;
 }
 
 
-int serial_search_parallel(int **A, int N, int searchNum, int cores){
-int counter = 0;
-#pragma omp parallel for collapse(2) schedule(static) num_threads(cores) reduction(+ : counter) 
-for(int i=0; i<N; i++){
-        for(int j=0; j<N; j++){
-            if(A[i][j] == searchNum){
-                counter++;
-            }
-        }
-    }
-    return counter;
-}
 
-int binary_search(int **A, int start, int end, int N, int searchNum){
+int binary_search(int *A, int start, int end, int searchNum){
     
-  int mid, row, col, value;
+  int mid, value;
 
   while (start <= end)
   {
     mid = start + (end - start) / 2;
-    row = mid / N;
-    col = mid % N;
-    value = A[row][col];
-    printf("\nmid %d, row %d, col %d, value %d",mid, row, col, value);
+    value = A[mid];
+    //printf("\nmid %d",mid);
 
-    if (value == searchNum){
-      printf("\nFound\n");
-      return 1;
+    if (A[value] == searchNum){
+      //printf("\nFound\n");
+      return A[mid];
     }
-    else if (value > searchNum){
+    else if (A[value] > searchNum){
       end = mid - 1;
       }
     else 

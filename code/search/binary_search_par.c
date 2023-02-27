@@ -6,124 +6,46 @@
 
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
+#include "../myLibs/parallelFunctions.h"
 
-#define N 10
+#define N 2000000000
+#define cores 8
 
-void binary_search_par_workSharing(int **A, int searchNum, int num_threads);
-int binarySearch_openmp(int **A, int first, int last, int NN, int searchVal);
 
 int main(int argc, char const *argv[]) {
     srand(time(NULL)); 
     double CPU_time;
     
-    int i, j, counter = 0, counter1 = 0, searchNum = 200;
-    int times_found;
+    int i, j, counter = 0;
+    int times_found, searchNum = randomGenInteger(0, N-1);  
 
     bool found = false;
 
      int start = 0;
-     int mid, row, col, value;
-     int end = N * N - 1;
+     int end = N - 1;
     
-    int **A;
+    int *A;
     
   
-    A = (int **)malloc(N * sizeof(int *));   //Initiating matrix A with malloc 
-        for(i=0; i<N; i++){
-            A[i] = (int *)malloc(N * sizeof(int));
+    A = (int *)malloc(N * sizeof(int *));   //Initiating matrix A with malloc 
+    
+    if(!A){
+      printf("\nToo much speedooo!\n");
+      return -1;
     }
 
     for(i=0; i<N; i++){
-        for(j=0; j<N; j++){
-            A[i][j] = counter++;
-        }
+      A[i] = counter++;
     }
 
-    display2D(A, N);
+   // display(A, N);
 
     printf("\n\n");
+for(int c = 2; c<=cores; c *=2)
+    parallel_work(A, N, searchNum, c);
 
-    binary_search_par_workSharing(A, searchNum, 4);
-
+    printf("\n\n");
     free(A);
         
 }
 
-void binary_search_par_workSharing(int **A, int searchNum, int num_threads){
-    
-    int result;
-    int midN, quarter_N, mid, row, col, value, start = 0, end = N * N - 1;
-    double start_time, end_time, time_took;
-
-    mid = start + (end - start) / 2;
-    midN = (N / 2) - 1;
-    quarter_N = midN / 2;
-
-    int thread_one, thread_two, thread_three, thread_four;
-    int quarter_slice = (mid / 2) + 1;
-
-     printf("\n****** Now beginning Parallel work with OpenMP ******\n\n");
-     printf("Starting binary search...\n");
-
-          start = omp_get_wtime();
-
-#pragma omp parallel num_threads(num_threads)
-    {
-#pragma omp sections
-        {
-        /* Function parameters:
-            binarySearch_openmp(Malloc_Matrix, first_index, last_index, matrix_N search_value);
-        */
-
-
-#pragma omp section
-            thread_one = binarySearch_openmp(A, 0, quarter_slice, midN,  searchNum);
-#pragma omp section
-            thread_two = binarySearch_openmp(A, quarter_slice + 1, mid, midN,  searchNum);
-#pragma omp section
-            thread_three = binarySearch_openmp(A, mid + 1, quarter_slice * 3, midN, searchNum);
-#pragma omp section
-            thread_four = binarySearch_openmp(A, (quarter_slice * 3) + 1, end, midN, searchNum);
-    }
-
-    end_time = omp_get_wtime();
-    time_took = end_time - start_time;
-    printf("Work took %f seconds\n", time_took);
-
-    // Print results of serial Binary search
-    if (result != -1)
-    {
-        printf("Element %d found! At index %d\n", searchNum, result);
-    }
-    else
-    {
-        printf("Element %d not found\n", searchNum);
-    }
-    printf("\n");
-  }
-}
-
-int binarySearch_openmp(int **A, int start, int end, int NN, int searchNum){
-    
-    
-  int mid, row, col, value;
-  
-  while (start <= end)
-  {
-    mid = start + (end - start) / 2;
-    row = mid / NN;
-    col = mid % NN;
-    value = A[row][col];
-
-    if (value == searchNum){
-      printf("\nFound\n");
-      return 1;
-    }
-    else if (value > searchNum){
-      end = mid - 1;
-      }
-    else 
-      start = mid + 1;
-  }
-  return -1;
-}

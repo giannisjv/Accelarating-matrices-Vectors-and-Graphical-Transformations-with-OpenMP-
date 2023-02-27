@@ -7,12 +7,15 @@
 #include "../myLibs/functions.h"
 
 #define N 10
+#define searchNum N / 2 
 
 int main(int argc, char const *argv[]) {
+   
     srand(time(NULL)); 
     double CPU_time;
+    time_t time_start, time_stop;
     
-    int i, j, counter = 0, counter1 = 0, searchNum = 10;
+    int i, j, counter = 0, counter1 = 0;
     int times_found;
 
     //bool found = false;
@@ -20,53 +23,28 @@ int main(int argc, char const *argv[]) {
      int found;
      int start = 0;
 
-     int end = N * N - 1;
+     int end = N - 1;
     
-    int **A;
+    int *A;
     
   
-    A = (int **)malloc(N * sizeof(int *));   //Initiating matrix A with malloc 
-        for(i=0; i<N; i++){
-            A[i] = (int *)malloc(N * sizeof(int));
-    }
+    A = (int *)malloc(N * sizeof(int *));   //Initiating matrix A with malloc 
 
     for(i=0; i<N; i++){
-        for(j=0; j<N; j++){
-            A[i][j] = counter++;
-        }
+            A[i] = counter++;
     }
-    display2D(A, N);
+    display(A, N);
 
     printf("\n\n");
 
+  time_start = clock();
   found = binary_search(A, start, end, N, searchNum);
+  time_stop = clock();
 
- /* 
-  while (start <= end)
-  {
-    mid = start + (end - start) / 2;
-    row = mid / N;
-    col = mid % N;
-    value = A[row][col];
-
-    if (value == searchNum){
-      printf("\nFound!\n");
-      found = true;
-      return 1;
-    }
-    else if (value > searchNum){
-      end = mid - 1;}
-    else
-      start = mid + 1;
-  }
-
-  if (found == false){
-    printf("\nDidn't found\n");
-  }
-  */
-
+  CPU_time = time_stop - time_start;
+  CPU_time /=CLOCKS_PER_SEC; 
   if(found == 1){
-    printf("\nFound it\n");
+    printf("\nFound it at time%5.6f\n",CPU_time);
   }else{
     printf("\nDoesn't exist\t# %d #\n",found);  
   }

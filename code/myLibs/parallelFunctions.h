@@ -1,3 +1,128 @@
+/*|===================================|
+  |start of serial search functions   |
+  |===================================|
+*/
+
+int serial_search_parallel_static(int *A, int N, int searchNum, int cores, int chunk){
+int result;
+#pragma omp parallel for schedule(static, chunk) num_threads(cores) reduction(+ : counter)
+for(int i=0; i<N; i++){
+            if(A[i] == searchNum)
+                result = A[i];
+    }
+    return result;
+}
+
+int serial_search_parallel_Dynamic(int *A, int N, int searchNum, int cores, int chunk){
+int result;
+#pragma omp parallel for schedule(dynamic, chunk) num_threads(cores) reduction(+ : counter)
+for(int i=0; i<N; i++){
+            if(A[i] == searchNum)
+                result = A[i];
+    }
+    return result;
+}
+
+
+int serial_search_parallel_Guided(int *A, int N, int searchNum, int cores, int chunk){
+int result;
+#pragma omp parallel for schedule(guided, chunk) num_threads(cores) reduction(+ : counter)
+for(int i=0; i<N; i++){
+            if(A[i] == searchNum)
+                result = A[i];
+    }
+    return result;
+}
+
+
+
+/*|===================================|
+  |end of serial search functions     |
+  |===================================|
+*/
+
+
+/*|==========================================|
+  |Start of serial binary paralell functions |
+  |==========================================|
+*/
+
+void parallel_work(int *A, int N, int searchVal, int num_threads){
+
+    int result;
+    double start, end, total_time;
+
+    // For use with Parallel search
+    int first = 0;
+    int last = N - 1;
+    int middle = first + (last - first) / 2;
+
+    // Array will be sliced into sections
+    int thread_one, thread_two, thread_three, thread_four;
+    int quarter_slice = middle / 2;
+
+   // printf("\n****** Now beginning Parallel work with OpenMP ******\n\n");
+
+    // printf("Starting binary search...\n");
+
+    start = omp_get_wtime();
+
+#pragma omp parallel num_threads(num_threads)
+    {
+#pragma omp sections
+        {
+        /* Function parameters:
+            binarySearch_openmp(first_index, last_index, search_value);
+        */
+
+#pragma omp section
+            thread_one = binary_search(A, 0, quarter_slice, searchVal);
+#pragma omp section
+            thread_two = binary_search(A, quarter_slice + 1, middle, searchVal);
+#pragma omp section
+            thread_three = binary_search(A, middle + 1, quarter_slice * 3, searchVal);
+#pragma omp section
+            thread_four = binary_search(A,  (quarter_slice * 3) + 1, last, searchVal);
+        }
+    }
+
+    end = omp_get_wtime();
+    total_time = end - start;
+
+    if(thread_one != -1){
+      result = thread_one;
+    }
+    else if(thread_two != -1){
+      result = thread_two;
+    }
+    else if(thread_three != -1){
+      result = thread_three;
+    }
+    else if(thread_four != -1){
+      result = thread_four;
+    }else
+    result = -1;
+    
+    
+    printf("Work took %f seconds ", total_time);
+
+    // Print results of serial Binary search
+    if (result != -1)
+    {
+        printf("Element %d found! At index %d\n", searchVal, result);
+    }
+    else
+    {
+        printf("Element %d not found\n", searchVal);
+    }
+    printf("\n");
+}
+
+
+/*|==========================================|
+  |end of serial binary paralell functions   |
+  |==========================================|
+*/
 
 
 /*|===============================|
