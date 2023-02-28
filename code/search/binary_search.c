@@ -2,21 +2,21 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <omp.h>
 
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
 
-#define N 10
-#define searchNum N / 2 
+#define N 2000000000
 
 int main(int argc, char const *argv[]) {
    
     srand(time(NULL)); 
     double CPU_time;
-    time_t time_start, time_stop;
+    double time_start, time_stop;
     
     int i, j, counter = 0, counter1 = 0;
-    int times_found;
+    int times_found, searchNum;
 
     //bool found = false;
 
@@ -33,22 +33,22 @@ int main(int argc, char const *argv[]) {
     for(i=0; i<N; i++){
             A[i] = counter++;
     }
-    display(A, N);
+    //display(A, N);
 
     printf("\n\n");
 
-  time_start = clock();
-  found = binary_search(A, start, end, N, searchNum);
-  time_stop = clock();
+  searchNum = randomGenInteger(0, N -1);
+  time_start = omp_get_wtime();
+  found = binary_search(A, start, end, searchNum);
+  time_stop = omp_get_wtime();
 
   CPU_time = time_stop - time_start;
-  CPU_time /=CLOCKS_PER_SEC; 
-  if(found == 1){
-    printf("\nFound it at time%5.6f\n",CPU_time);
+  
+  if(found != -1){
+    printf("\nFound the num %d it at time %5.6f\n",found, CPU_time);
   }else{
     printf("\nDoesn't exist\t# %d #\n",found);  
   }
-
     free(A);
         
 }

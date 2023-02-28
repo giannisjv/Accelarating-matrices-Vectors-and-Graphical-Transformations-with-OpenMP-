@@ -2,7 +2,7 @@
   |start of serial search functions   |
   |===================================|
 */
-
+/*
 int serial_search_parallel_static(int *A, int N, int searchNum, int cores, int chunk){
 int result;
 #pragma omp parallel for schedule(static, chunk) num_threads(cores) reduction(+ : counter)
@@ -34,7 +34,7 @@ for(int i=0; i<N; i++){
     return result;
 }
 
-
+*/
 
 /*|===================================|
   |end of serial search functions     |
@@ -71,10 +71,6 @@ void parallel_work(int *A, int N, int searchVal, int num_threads){
     {
 #pragma omp sections
         {
-        /* Function parameters:
-            binarySearch_openmp(first_index, last_index, search_value);
-        */
-
 #pragma omp section
             thread_one = binary_search(A, 0, quarter_slice, searchVal);
 #pragma omp section
@@ -104,8 +100,8 @@ void parallel_work(int *A, int N, int searchVal, int num_threads){
     result = -1;
     
     
-    printf("Work took %f seconds ", total_time);
-
+    printf("%f\t%d ", total_time, searchVal);
+/*
     // Print results of serial Binary search
     if (result != -1)
     {
@@ -115,7 +111,9 @@ void parallel_work(int *A, int N, int searchVal, int num_threads){
     {
         printf("Element %d not found\n", searchVal);
     }
+    */
     printf("\n");
+
 }
 
 

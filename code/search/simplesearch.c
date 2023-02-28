@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <omp.h>
 
 #include "../myLibs/colib.h"
 #include "../myLibs/functions.h"
@@ -10,7 +11,7 @@
 
 int main(int argc, char const *argv[]) {
     srand(time(NULL)); 
-    time_t start, end;
+    double start, end;
     double CPU_time;
     int i, j, searchNum;
     int times_found;
@@ -31,11 +32,10 @@ int main(int argc, char const *argv[]) {
     for (i = 1; i <= 4096; i *=2)
     {
     
-start = clock();
+start = omp_get_wtime();
     times_found = serial_search(A, N, searchNum);
-end = clock();
+end = omp_get_wtime();
     CPU_time = end - start;
-    CPU_time /= CLOCKS_PER_SEC;
 
     printf("%5.6f\n\n\n\n\n", CPU_time);
     CPU_time = start = end = 0;

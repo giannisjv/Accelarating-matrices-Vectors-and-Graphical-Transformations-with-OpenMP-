@@ -223,17 +223,12 @@ for(int i=0; i<N; i++){
 
 
 int binary_search(int *A, int start, int end, int searchNum){
-    
   int mid, value;
-
   while (start <= end)
   {
     mid = start + (end - start) / 2;
     value = A[mid];
-    //printf("\nmid %d",mid);
-
     if (A[value] == searchNum){
-      //printf("\nFound\n");
       return A[mid];
     }
     else if (A[value] > searchNum){
