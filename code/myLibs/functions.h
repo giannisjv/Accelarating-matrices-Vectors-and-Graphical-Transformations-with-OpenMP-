@@ -76,7 +76,7 @@ void display2D(int **a, int size){
   }
 }
 
-void display_2D_Non_Squered(int **a, int row, int column){
+void display_2D_Non_Squared(int **a, int row, int column){
    #include "colib.h"
    for (int i = 0; i <row; i++)
     {

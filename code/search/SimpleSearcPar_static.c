@@ -9,6 +9,8 @@
 
 #define N 2000000000
 #define cores 8
+#define min 1
+#define max 1000
 
 int main(int argc, char const *argv[]) {
     
@@ -17,15 +19,16 @@ int main(int argc, char const *argv[]) {
     double CPU_time, CPU_timeSeq;
     double Start = 0.0, Stop =0.0;
 
-    int i, j, times_found, counter = 0, counterPar = 0;
+    int i, j, times_found, counterPar = 0;
     int *A;
-    int searchNum = N / 2;
+    int searchNum = randomGenInteger(min, max);
+;
 
     //Initiating matrix A with malloc 
     A = (int *)malloc(N * sizeof(int *));
     printf("\n\n");
     for(i=0; i<N; i++){
-            A[i] = counter++;
+            A[i] = randomGenInteger(min, max);
     }
     
     for (int chunk = 1; chunk <=4096; chunk *=2)
@@ -45,6 +48,7 @@ int main(int argc, char const *argv[]) {
     printf("\n\n");
 
 //display(A, N);
+    printf("times Found (%d)",times_found);
     free(A);
  printf("\n\n");
 return 0;
