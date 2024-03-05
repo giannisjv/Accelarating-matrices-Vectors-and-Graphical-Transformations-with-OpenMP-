@@ -2,9 +2,9 @@
   |start of serial search functions   |
   |===================================|
 */
-/*
+
 int serial_search_parallel_static(int *A, int N, int searchNum, int cores, int chunk){
-int result;
+int result, counter = 0;
 #pragma omp parallel for schedule(static, chunk) num_threads(cores) reduction(+ : counter)
 for(int i=0; i<N; i++){
             if(A[i] == searchNum)
@@ -14,7 +14,7 @@ for(int i=0; i<N; i++){
 }
 
 int serial_search_parallel_Dynamic(int *A, int N, int searchNum, int cores, int chunk){
-int result;
+int result, counter = 0;
 #pragma omp parallel for schedule(dynamic, chunk) num_threads(cores) reduction(+ : counter)
 for(int i=0; i<N; i++){
             if(A[i] == searchNum)
@@ -25,7 +25,7 @@ for(int i=0; i<N; i++){
 
 
 int serial_search_parallel_Guided(int *A, int N, int searchNum, int cores, int chunk){
-int result;
+int result, counter = 0;
 #pragma omp parallel for schedule(guided, chunk) num_threads(cores) reduction(+ : counter)
 for(int i=0; i<N; i++){
             if(A[i] == searchNum)
@@ -34,7 +34,7 @@ for(int i=0; i<N; i++){
     return result;
 }
 
-*/
+
 
 /*|===================================|
   |end of serial search functions     |

@@ -63,7 +63,7 @@ int main(){
 		 }
 	 }
 
-start=clock();											// Starting the timing
+start=clock();										// Starting the timing
 	 for(i=0;i<N;i++){									// first "for" for rows
  	   for(j=0;j<M;j++){								// second "for" for columns
  			B[i][j] = A[i][j] * Multiply_Numb;			// multiply every number of "A" with a number and send it to "B"
@@ -72,16 +72,17 @@ start=clock();											// Starting the timing
 end=clock();											// End of the timing
 
 // printf("\n");
-// display_2D_Non_Squered(A, N, M);						// Display "A"
+// display_2D_Non_Squared(A, N, M);						// Display "A"
 // printf("\n\n\n");
-// display_2D_Non_Squered(B, N, M);						// Display "B"
+// display_2D_Non_Squared(B, N, M);						// Display "B"
 
 //scalar_matrix_corr(A, B, N, M, Multiply_Numb);
 
-time_taken = (end - start);
-time_taken /=CLOCKS_PER_SEC;
+time_taken = (end - start) / 3600;
 
 printf("\n\n\nExecution τime of sum: (%5.6f)\n\nRandom Number: (%d)\n",time_taken, Multiply_Numb);
+free(A);
+free(B);
 
 return 0;
 		 }
