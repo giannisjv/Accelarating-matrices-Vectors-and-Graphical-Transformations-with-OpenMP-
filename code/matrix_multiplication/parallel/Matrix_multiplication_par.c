@@ -123,7 +123,7 @@ long int  counter = 0;
         //matrix_multi_checker(A, B, C, NA, MA, MA);
        dynamicSt = omp_get_wtime();
 
-	  #pragma omp  for schedule(dynamic) private(i, j, p, sum)
+	  #pragma omp for schedule(dynamic) private(i, j, p, sum)
 			  for(i=0; i<NA; i++){
             for (j=0; j<MB; j++) {
               sum = 0;
