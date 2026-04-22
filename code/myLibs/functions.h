@@ -1,5 +1,4 @@
-/* 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
-
+/* 
 randomness function
 
 randomness function floating Point
