@@ -8,7 +8,7 @@ A high-performance parallel computing benchmark suite developed in pure C, utili
 ## 📌 Advanced Benchmarking Methodology & Architecture
 Unlike monolithic applications, this repository is designed as an **architectural testing suite**. The core testing matrix relies on a nested benchmarking loop pattern implemented inside the execution code to map out precise performance scaling curves:
 
-1. **Exponential CPU Core Scaling:** An outer loop programmatically scales the execution workload across CPU cores exponentially ($1 \rightarrow 2 \rightarrow 4 \rightarrow 8$ threads) using `omp_set_num_threads()`.
+1. **Exponential CPU Core Scaling:** An outer loop programmatically scales the execution workload across CPU cores exponentially ($1 \rightarrow 2 \rightarrow 4 \rightarrow 8$ threads) using `num_threads()`.
 2. **Scheduler Chunk Size Tuning:** An inner loop evaluates the OpenMP scheduling sub-parameters, dynamically altering the **chunk size** configuration per test run. 
 
 This dual-axis execution matrix allows for precise profiling of the hardware's threshold, measuring exactly when the parallel processing benefits are eclipsed by thread synchronization and cache-miss overheads.
